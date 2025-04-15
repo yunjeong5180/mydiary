@@ -1,64 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html> <!-- HTML5 문서임을 선언 -->
+<html lang="en"> <!-- HTML 문서 언어는 영어 -->
+
 <head>
-    <meta charset="UTF-8">
-    <title>나의 일기장</title>
+    <meta charset="UTF-8"> <!-- 문자 인코딩: 한글 포함한 다양한 문자 지원 -->
+    <title>나의 일기장</title> <!-- 브라우저 탭에 표시될 제목 -->
 </head>
+
 <body>
-    <h1>📘 나의 일기장 </h1>
+<h1>📘 나의 일기장 </h1> <!-- 가장 큰 제목 -->
 
-    <form id="diary-form">
-        <input type="text" id="title" placeholder="제목" required />
-        <br />
-        <textarea id="content" placeholder="내용" required></textarea>
-        <br />
-        <button type="submit">일기 저장</button>
-    </form>
+<!-- 일기 작성 폼 -->
+<form id="diary-form">
+    <input type="text" id="title" placeholder="제목" required />
+    <!-- 제목 입력창, 비어 있으면 제출 불가 -->
 
-    <h2>📜 일기 목록</h2>
-    <ul id="diary-list"></ul>
+    <br />
 
-    <script>
-        const form = document.getElementById("diary-form");
-        const titleInput = document.getElementById("title");
-        const contentInput = document.getElementById("content");
-        const diaryList = document.getElementById("diary-list");
+    <textarea id="content" placeholder="내용" required></textarea>
+    <!-- 내용 입력창, 여러 줄 입력 가능 -->
 
-        // 일기 저장
-        form.addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const diary = {
+    <br />
+
+    <button type="submit">일기 저장</button>
+    <!-- 버튼을 누르면 일기 저장됨 -->
+</form>
+
+<h2>📜 일기 목록</h2> <!-- 일기 리스트를 보여줄 제목 -->
+<ul id="diary-list"></ul> <!-- 여기에 일기 항목들이 추가될 예정 -->
+
+<!-- 자바스크립트 코드 시작 -->
+<script>
+    // DOM 요소들 가져오기
+    const form = document.getElementById("diary-form"); // 폼
+    const titleInput = document.getElementById("title"); // 제목 입력란
+    const contentInput = document.getElementById("content"); // 내용 입력란
+    const diaryList = document.getElementById("diary-list"); // 일기 목록 <ul>
+
+    // [1] 일기 저장 처리
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault(); // 폼 기본 동작(페이지 새로고침) 막기
+
+        // 입력한 제목과 내용을 객체로 만듦
+        const diary = {
             title: titleInput.value,
             content: contentInput.value
-          };
+        };
 
-          const res = await fetch("/diaries", {
+        // POST 요청으로 서버에 일기 전송
+        const res = await fetch("/diaries", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(diary)
-          });
+            body: JSON.stringify(diary) // 객체를 JSON 문자열로 변환
+        });
 
-          if (res.ok) {
+        // 전송 성공 시 입력칸 초기화 + 목록 새로고침
+        if (res.ok) {
             titleInput.value = "";
             contentInput.value = "";
-            loadDiaries();
-          }
-        });
-
-        // 일기 불러오기
-        async function loadDiaries() {
-          const res = await fetch("/diaries");
-          const data = await res.json();
-          diaryList.innerHTML = "";
-          data.forEach((d) => {
-          const li = document.createElement("li");
-          li.innerText = `📖 ${d.title} - ${d.content}`;  // ✅ 이 줄 수정
-          diaryList.appendChild(li);
-        });
+            loadDiaries(); // 최신 일기 목록 다시 불러오기
         }
+    });
 
-        // 처음에 일기 불러오기
-        loadDiaries();
-    </script>
+    // [2] 일기 목록 불러오기
+    async function loadDiaries() {
+        const res = await fetch("/diaries"); // 서버에 GET 요청
+        const data = await res.json(); // 응답을 JSON으로 변환
+
+        diaryList.innerHTML = ""; // 기존 목록 초기화
+
+        // 일기 하나하나 <li> 태그로 추가
+        data.forEach((d) => {
+            const li = document.createElement("li");
+            li.innerHTML = `📖 <strong>${d.title}</strong><br>${d.content.replace(/\n/g, '<br>')}`; // 제목과 내용 표시
+            diaryList.appendChild(li); // <ul>에 <li> 추가
+        });
+    }
+
+    // [3] 페이지 처음 열릴 때 자동으로 일기 불러오기
+    loadDiaries();
+</script>
 </body>
 </html>
