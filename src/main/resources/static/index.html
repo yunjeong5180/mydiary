@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>나의 일기장</title>
+</head>
+<body>
+    <h1>📘 나의 일기장 </h1>
+
+    <form id="diary-form">
+        <input type="text" id="title" placeholder="제목" required />
+        <br />
+        <textarea id="content" placeholder="내용" required></textarea>
+        <br />
+        <button type="submit">일기 저장</button>
+    </form>
+
+    <h2>📜 일기 목록</h2>
+    <ul id="diary-list"></ul>
+
+    <script>
+        const form = document.getElementById("diary-form");
+        const titleInput = document.getElementById("title");
+        const contentInput = document.getElementById("content");
+        const diaryList = document.getElementById("diary-list");
+
+        // 일기 저장
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const diary = {
+            title: titleInput.value,
+            content: contentInput.value
+          };
+
+          const res = await fetch("/diaries", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(diary)
+          });
+
+          if (res.ok) {
+            titleInput.value = "";
+            contentInput.value = "";
+            loadDiaries();
+          }
+        });
+
+        // 일기 불러오기
+        async function loadDiaries() {
+          const res = await fetch("/diaries");
+          const data = await res.json();
+          diaryList.innerHTML = "";
+          data.forEach((d) => {
+          const li = document.createElement("li");
+          li.innerText = `📖 ${d.title} - ${d.content}`;  // ✅ 이 줄 수정
+          diaryList.appendChild(li);
+        });
+        }
+
+        // 처음에 일기 불러오기
+        loadDiaries();
+    </script>
+</body>
+</html>
