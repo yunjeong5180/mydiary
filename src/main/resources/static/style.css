@@ -1,0 +1,125 @@
+/* 전체 폰트 & 배경 */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: #f5f5f7;
+  margin: 0;
+  padding: 60px 20px;
+  color: #1d1d1f;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* 제목 스타일 */
+h1 {
+  font-size: 3rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+/* 일기 작성 폼 */
+form {
+  background-color: #ffffff;
+  padding: 2.5rem;
+  border-radius: 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+  margin: 0 auto 3rem auto; /* 상 0, 좌우 auto, 하 3rem */
+  max-width: 600px; /* 폼 가로 폭 제한 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 입력창 스타일 */
+input[type="text"],
+textarea {
+  width: 100%;
+  max-width: 500px;
+  padding: 1.2rem;
+  font-size: 1.1rem;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  margin-bottom: 1.2rem;
+  background-color: #f9f9fa;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+/* 📝 내용 입력창을 더 길게 */
+textarea {
+  min-height: 150px;
+  resize: vertical; /* 유저가 세로 크기 조절 가능 */
+}
+
+input:focus,
+textarea:focus {
+  border-color: #0071e3;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
+  outline: none;
+}
+
+/* 저장 버튼 */
+button {
+  background-color: #0071e3;
+  color: white;
+  border: none;
+  padding: 0.9rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+button:hover {
+  background-color: #005bb5;
+  transform: translateY(-1px);
+}
+
+/* 일기 목록 */
+#diary-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#diary-list li {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+#diary-list li:hover {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+#diary-list strong {
+  display: block;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+/* 삭제 버튼 */
+#diary-list button {
+  background-color: #ff3b30;
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  margin-top: 1rem;
+}
+
+#diary-list button:hover {
+  background-color: #d32f2f;
+}
