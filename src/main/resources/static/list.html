@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko"> <!-- 문서의 언어 설정: 한국어 -->
+<head>
+  <meta charset="UTF-8"> <!-- 한글 깨짐 방지를 위한 문자 인코딩 -->
+  <title>📋 일기 목록</title> <!-- 브라우저 탭 제목 -->
+
+  <!-- CSS 스타일 연결 -->
+  <link rel="stylesheet" href="/style.css">
+
+  <!-- Google Fonts에서 부드러운 한글 폰트 불러오기 -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ✅ 상단 네비게이션 바 -->
+<nav class="nav-bar">
+  <h1 class="nav-title">📘 나의 일기장</h1> <!-- 왼쪽 제목 -->
+  <div class="nav-menu"> <!-- 오른쪽 메뉴 링크 -->
+    <a href="/index.html">🏠 홈</a>
+    <a href="/write.html">✍️ 작성</a>
+  </div>
+</nav>
+
+<!-- ✅ 본문 내용 시작 -->
+<main class="main-content">
+  <h2>📋 일기 목록</h2>
+
+  <!-- 🔽 정렬 옵션 선택 -->
+  <label for="sort">정렬:</label>
+  <select id="sort">
+    <option value="desc">최신순</option>
+    <option value="asc">오래된순</option>
+  </select>
+
+  <!-- 📋 일기들이 들어갈 자리 -->
+  <ul id="diary-list"></ul>
+</main>
+
+<!-- ✅ 일기 불러오기 & 삭제 로직 -->
+<script>
+  const diaryList = document.getElementById("diary-list");
+
+  // 🗑️ 일기 삭제 함수
+  async function deleteDiary(id) {
+    await fetch(`/diaries/${id}`, { method: "DELETE" });
+    loadDiaries(); // 삭제 후 목록 다시 불러오기
+  }
+
+  // 📥 서버에서 일기들을 받아와 목록에 보여주는 함수
+  async function loadDiaries() {
+    const sort = document.getElementById("sort").value; // 선택된 정렬 방식
+    const res = await fetch(`/diaries?sort=${sort}`);   // 서버에 GET 요청
+    const data = await res.json();                      // JSON으로 변환
+
+    diaryList.innerHTML = ""; // 기존 목록 초기화
+
+    // 받아온 일기 데이터를 화면에 추가
+    data.forEach((d) => {
+      const li = document.createElement("li"); // 리스트 항목 생성
+      li.innerHTML = `
+        <strong>${d.title}</strong><br>
+        ${d.content.replace(/\n/g, '<br>')} <!-- 줄바꿈 처리 -->
+        <br><small>🕒 ${new Date(d.createdAt).toLocaleString()}</small>
+        <button onclick="deleteDiary(${d.id})" style="margin-left: 10px;">🗑️ 삭제</button>
+      `;
+      diaryList.appendChild(li); // 목록에 추가
+    });
+  }
+
+  loadDiaries(); // 🔄 페이지 로드 시 목록 불러오기
+
+  // 🔁 정렬 옵션이 변경되면 목록 다시 불러오기
+  document.getElementById("sort").addEventListener("change", loadDiaries);
+</script>
+
+</body>
+</html>

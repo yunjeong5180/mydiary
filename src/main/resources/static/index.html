@@ -1,105 +1,37 @@
-<!DOCTYPE html> <!-- 이 문서가 HTML5라는 걸 선언 -->
-<html lang="en"> <!-- 문서의 언어는 영어 -->
+<!DOCTYPE html> <!-- 이 문서가 HTML5 형식이라는 선언 -->
+<html lang="ko"> <!-- 이 문서의 기본 언어는 한국어 -->
 
 <head>
-    <meta charset="UTF-8"> <!-- 문자 인코딩 설정 (한글 등 여러 문자 가능) -->
-    <title>나의 일기장</title> <!-- 브라우저 탭에 보일 제목 -->
+    <meta charset="UTF-8"> <!-- 문자 인코딩: 한글 등 다양한 문자 지원 -->
+    <title>나의 일기장 - 홈</title> <!-- 브라우저 탭에 표시될 제목 -->
+
+    <!-- 스타일(CSS) 파일 연결 -->
     <link rel="stylesheet" href="/style.css">
+
+    <!-- 한글 웹폰트(Noto Sans KR) 불러오기 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<!-- 웹페이지 제목 -->
-<h1>📘 나의 일기장 </h1>
+<!-- 상단에 고정된 네비게이션 바 -->
+<nav class="nav-bar">
+    <!-- 왼쪽 상단 제목 (브랜드 역할) -->
+    <h1 class="nav-title">📘 나의 일기장</h1>
+</nav>
 
-<!-- ✍️ 일기를 작성하는 부분 (입력 폼) -->
-<form id="diary-form">
-    <!-- 제목 입력란 -->
-    <input type="text" id="title" placeholder="제목" required />
-    <br />
+<!-- 중앙에 보여줄 메인 콘텐츠 영역 -->
+<main class="home-center">
+    <!-- 사용자에게 안내 메시지 -->
+    <h2>오늘의 일기를 기록해보세요 😊</h2>
 
-    <!-- 내용 입력란 (여러 줄 가능) -->
-    <textarea id="content" placeholder="내용" required></textarea>
-    <br />
+    <!-- 아래는 두 개의 주요 기능 버튼 -->
+    <!-- ✍️ 버튼: 일기 작성 페이지로 이동 -->
+    <a href="/write.html"><button>✍️ 새 일기 작성</button></a>
 
-    <!-- 저장 버튼 (눌렀을 때 서버로 데이터 전송됨) -->
-    <button type="submit">일기 저장</button>
-</form>
-
-<!-- 📋 일기 목록을 보여주는 제목 -->
-<h2>📜 일기 목록</h2>
-
-<!-- 일기 목록이 여기에 하나씩 들어감 -->
-<ul id="diary-list"></ul>
-
-<!-- 🧠 자바스크립트: 웹페이지가 동작하는 로직 -->
-<script>
-    // 📌 입력 폼과 입력창들, 목록 영역을 변수로 저장
-    const form = document.getElementById("diary-form");
-    const titleInput = document.getElementById("title");
-    const contentInput = document.getElementById("content");
-    const diaryList = document.getElementById("diary-list");
-
-    // [1] ✨ 일기 저장할 때 실행되는 코드
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault(); // 기본 동작(새로고침) 막기
-
-        // 입력한 제목과 내용을 객체로 만들기
-        const diary = {
-            title: titleInput.value,
-            content: contentInput.value
-        };
-
-        // 서버에 POST 방식으로 보내기
-        const res = await fetch("/diaries", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(diary)
-        });
-
-        // 성공적으로 저장되면 폼 초기화하고 다시 목록 불러오기
-        if (res.ok) {
-            titleInput.value = "";
-            contentInput.value = "";
-            loadDiaries();
-        }
-    });
-
-    // [2] 🗑️ 삭제 요청을 보내는 함수
-    async function deleteDiary(id) {
-        await fetch(`/diaries/${id}`, {
-            method: "DELETE"
-        });
-        loadDiaries(); // 삭제한 뒤 목록 새로고침
-    }
-
-    // [3] 📋 일기 목록을 서버에서 받아와서 화면에 보여주는 함수
-    async function loadDiaries() {
-        const res = await fetch("/diaries"); // 서버에 GET 요청
-        const data = await res.json(); // 응답을 JSON 데이터로 변환
-
-        // 기존 목록 비우기
-        diaryList.innerHTML = "";
-
-        // 받아온 일기 하나하나를 화면에 추가
-        data.forEach((d) => {
-            const li = document.createElement("li"); // 리스트 항목 만들기
-
-            // 제목, 내용, 삭제 버튼을 함께 보여주기
-            li.innerHTML = `
-                <strong>${d.title}</strong><br>
-                ${d.content.replace(/\n/g, '<br>')}
-                <button onclick="deleteDiary(${d.id})" style="margin-left: 10px;">🗑️ 삭제</button>
-            `;
-
-            diaryList.appendChild(li); // 목록에 항목 추가
-        });
-    }
-
-    // [4] 🔄 웹페이지 열리면 자동으로 일기 목록을 불러옴
-    loadDiaries();
-</script>
+    <!-- 📋 버튼: 저장된 일기 목록 보기 페이지로 이동 -->
+    <a href="/list.html"><button>📋 일기 목록 보기</button></a>
+</main>
 
 </body>
 </html>

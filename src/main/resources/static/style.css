@@ -1,125 +1,173 @@
-/* 전체 폰트 & 배경 */
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background-color: #f5f5f7;
-  margin: 0;
-  padding: 60px 20px;
-  color: #1d1d1f;
-  max-width: 800px;
-  margin: 0 auto;
+/* ✅ 전체 기본 세팅 (초기화) */
+* {
+  box-sizing: border-box;  /* padding과 border 포함한 너비 계산 */
+  margin: 0;               /* 기본 여백 제거 */
+  padding: 0;
 }
 
-/* 제목 스타일 */
-h1 {
-  font-size: 3rem;
-  font-weight: 600;
-  margin-bottom: 2rem;
+body {
+  font-family: 'Helvetica Neue', 'Noto Sans KR', sans-serif; /* 부드럽고 깔끔한 폰트 */
+  background-color: #f9f9f9;   /* 연한 회색 배경으로 눈에 편안하게 */
+  color: #1c1c1e;              /* 어두운 회색 텍스트 */
+}
+
+/* ✅ 네비게이션 바 (상단 메뉴 영역) */
+.nav-bar {
+  background-color: #ffffff;   /* 흰 배경 */
+  display: flex;               /* 가로 정렬 */
+  justify-content: space-between; /* 좌우 정렬 (제목 왼쪽, 메뉴 오른쪽) */
+  align-items: center;         /* 수직 중앙 정렬 */
+  padding: 1rem 2rem;          /* 위아래/양옆 여백 */
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05); /* 그림자 효과 */
+  position: sticky;            /* 스크롤해도 위에 고정 */
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-title {
+  font-size: 1.8rem;       /* 제목 글자 크기 */
+  font-weight: bold;
+  color: #007aff;          /* 애플 느낌의 파란색 */
+}
+
+.nav-menu {
+  display: flex;           /* 가로 메뉴 */
+  gap: 1rem;               /* 메뉴 간격 */
+}
+
+.nav-menu a {
+  text-decoration: none;   /* 밑줄 제거 */
+  color: #007aff;          /* 파란색 글씨 */
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.2s ease; /* 색 전환 부드럽게 */
+}
+
+.nav-menu a:hover {
+  color: #0051a8;          /* 마우스 올렸을 때 진한 파란색 */
+}
+
+/* ✅ 메인 화면에서 중앙 정렬용 (홈 화면 전용) */
+.home-center {
+  height: calc(100vh - 80px);  /* 화면 높이에서 네비게이션 제외한 높이 */
+  display: flex;
+  flex-direction: column;     /* 세로 정렬 */
+  justify-content: center;    /* 수직 가운데 정렬 */
+  align-items: center;        /* 가로 가운데 정렬 */
   text-align: center;
 }
 
-h2 {
-  font-size: 1.5rem;
-  font-weight: 500;
-  margin-top: 3rem;
-  margin-bottom: 1.5rem;
-  color: #333;
+/* ✅ 일반 콘텐츠 공통 스타일 (작성/목록 페이지 등) */
+.main-content {
+  max-width: 700px;           /* 최대 너비 */
+  margin: 2rem auto;          /* 가운데 정렬 + 위아래 여백 */
+  padding: 1rem;
+  text-align: center;
 }
 
-/* 일기 작성 폼 */
-form {
-  background-color: #ffffff;
-  padding: 2.5rem;
-  border-radius: 24px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
-  margin: 0 auto 3rem auto; /* 상 0, 좌우 auto, 하 3rem */
-  max-width: 600px; /* 폼 가로 폭 제한 */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* 입력창 스타일 */
-input[type="text"],
-textarea {
-  width: 100%;
-  max-width: 500px;
-  padding: 1.2rem;
-  font-size: 1.1rem;
-  border: 1px solid #ddd;
-  border-radius: 16px;
-  margin-bottom: 1.2rem;
-  background-color: #f9f9fa;
-  transition: all 0.2s ease;
-  box-sizing: border-box;
-}
-
-/* 📝 내용 입력창을 더 길게 */
-textarea {
-  min-height: 150px;
-  resize: vertical; /* 유저가 세로 크기 조절 가능 */
-}
-
-input:focus,
-textarea:focus {
-  border-color: #0071e3;
-  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
-  outline: none;
-}
-
-/* 저장 버튼 */
+/* ✅ 버튼 스타일 */
 button {
-  background-color: #0071e3;
-  color: white;
+  background-color: #007aff;  /* 파란 배경 */
+  color: #fff;
   border: none;
-  padding: 0.9rem 2rem;
-  font-size: 1.1rem;
-  font-weight: 500;
-  border-radius: 30px;
+  border-radius: 12px;        /* 둥근 버튼 */
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.1s ease;
+  transition: background-color 0.3s ease;
+  margin: 0.5rem;
 }
 
 button:hover {
-  background-color: #005bb5;
-  transform: translateY(-1px);
+  background-color: #0051a8;  /* 마우스 올렸을 때 더 진한 파란색 */
 }
 
-/* 일기 목록 */
-#diary-list {
+/* ✅ 일기 작성 폼 스타일 */
+form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+input[type="text"],
+textarea {
+  padding: 1rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #fafafa;
+  width: 100%;
+}
+
+textarea {
+  min-height: 150px;
+  resize: vertical;  /* 세로로만 크기 조절 가능 */
+}
+
+/* ✅ 정렬 드롭다운 */
+label,
+select {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+select {
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* ✅ 일기 목록 스타일 */
+ul#diary-list {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin-top: 2rem;
 }
 
-#diary-list li {
-  background-color: #ffffff;
-  border-radius: 20px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.3s ease;
+ul#diary-list li {
+  background: white;
+  padding: 1.2rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
+  margin-bottom: 1.2rem;
+  line-height: 1.6;
+  position: relative;
+  text-align: left;
 }
 
-#diary-list li:hover {
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-}
-
-#diary-list strong {
-  display: block;
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-}
-
-/* 삭제 버튼 */
-#diary-list button {
+/* 🗑️ 삭제 버튼 스타일 (일기 오른쪽 상단) */
+ul#diary-list button {
   background-color: #ff3b30;
-  font-size: 0.95rem;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  margin-top: 1rem;
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
 }
 
-#diary-list button:hover {
-  background-color: #d32f2f;
+ul#diary-list button:hover {
+  background-color: #d9231d;  /* 진한 빨강 */
+}
+
+/* ✅ 반응형 디자인 (모바일 대응) */
+@media (max-width: 768px) {
+  .nav-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-title {
+    text-align: left;
+    margin-bottom: 0.5rem;
+  }
+
+  .nav-menu {
+    justify-content: flex-start;
+  }
 }

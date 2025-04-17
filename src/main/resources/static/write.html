@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko"> <!-- 문서의 언어는 한국어 -->
+<head>
+    <meta charset="UTF-8"> <!-- 한글이 깨지지 않도록 문자 인코딩 설정 -->
+    <title>✍️ 새 일기 작성</title> <!-- 브라우저 탭에 보일 제목 -->
+
+    <!-- 외부 CSS 파일 연결 (디자인 스타일 적용용) -->
+    <link rel="stylesheet" href="/style.css">
+
+    <!-- Google Fonts에서 한글 폰트 불러오기 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ✅ 상단 네비게이션 바 -->
+<nav class="nav-bar">
+    <!-- 왼쪽에는 제목 -->
+    <h1 class="nav-title">📘 나의 일기장</h1>
+
+    <!-- 오른쪽에는 다른 페이지로 이동할 수 있는 메뉴 -->
+    <div class="nav-menu">
+        <a href="/index.html">🏠 홈</a>
+        <a href="/list.html">📋 목록</a>
+    </div>
+</nav>
+
+<!-- ✅ 일기 작성 화면 본문 -->
+<main class="main-content">
+    <h2>✍️ 새 일기 작성하기</h2>
+
+    <!-- ✍️ 사용자 입력을 받는 폼 -->
+    <form id="diary-form">
+        <!-- 제목 입력칸 -->
+        <input type="text" id="title" placeholder="제목" required />
+
+        <!-- 내용 입력칸 -->
+        <textarea id="content" placeholder="내용" required></textarea>
+
+        <!-- 저장 버튼 -->
+        <button type="submit">저장</button>
+    </form>
+</main>
+
+<!-- ✅ 일기 저장을 처리하는 JavaScript 코드 -->
+<script>
+    // 폼, 제목, 내용 요소 가져오기
+    const form = document.getElementById("diary-form");
+    const titleInput = document.getElementById("title");
+    const contentInput = document.getElementById("content");
+
+    // 폼이 제출되었을 때 실행될 동작 정의
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault(); // 기본 동작(새로고침) 막기
+
+      // 사용자 입력값을 객체로 만들기
+      const diary = {
+        title: titleInput.value,
+        content: contentInput.value
+      };
+
+      // 서버에 POST 요청으로 일기 저장 요청 보내기
+      const res = await fetch("/diaries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(diary)
+      });
+
+      // 응답이 성공이면 입력창 비우고 알림 띄우기
+      if (res.ok) {
+        alert("일기가 저장되었습니다!");
+        titleInput.value = "";
+        contentInput.value = "";
+      }
+    });
+</script>
+
+</body>
+</html>
