@@ -1,76 +1,76 @@
-/* ✅ 전체 기본 세팅 (초기화) */
+/* ✅ 전체 초기화 */
 * {
-  box-sizing: border-box;  /* padding과 border 포함한 너비 계산 */
-  margin: 0;               /* 기본 여백 제거 */
+  box-sizing: border-box;
+  margin: 0;
   padding: 0;
 }
 
 body {
-  font-family: 'Helvetica Neue', 'Noto Sans KR', sans-serif; /* 부드럽고 깔끔한 폰트 */
-  background-color: #f9f9f9;   /* 연한 회색 배경으로 눈에 편안하게 */
-  color: #1c1c1e;              /* 어두운 회색 텍스트 */
+  font-family: 'Helvetica Neue', 'Noto Sans KR', sans-serif;
+  background-color: #f9f9f9;
+  color: #1c1c1e;
 }
 
-/* ✅ 네비게이션 바 (상단 메뉴 영역) */
+/* ✅ 네비게이션 바 */
 .nav-bar {
-  background-color: #ffffff;   /* 흰 배경 */
-  display: flex;               /* 가로 정렬 */
-  justify-content: space-between; /* 좌우 정렬 (제목 왼쪽, 메뉴 오른쪽) */
-  align-items: center;         /* 수직 중앙 정렬 */
-  padding: 1rem 2rem;          /* 위아래/양옆 여백 */
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05); /* 그림자 효과 */
-  position: sticky;            /* 스크롤해도 위에 고정 */
+  background-color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+  position: sticky;
   top: 0;
   z-index: 1000;
 }
 
 .nav-title {
-  font-size: 1.8rem;       /* 제목 글자 크기 */
+  font-size: 1.8rem;
   font-weight: bold;
-  color: #007aff;          /* 애플 느낌의 파란색 */
+  color: #007aff;
 }
 
 .nav-menu {
-  display: flex;           /* 가로 메뉴 */
-  gap: 1rem;               /* 메뉴 간격 */
+  display: flex;
+  gap: 1rem;
 }
 
 .nav-menu a {
-  text-decoration: none;   /* 밑줄 제거 */
-  color: #007aff;          /* 파란색 글씨 */
+  text-decoration: none;
+  color: #007aff;
   font-weight: 500;
   font-size: 1rem;
-  transition: color 0.2s ease; /* 색 전환 부드럽게 */
+  transition: color 0.2s ease;
 }
 
 .nav-menu a:hover {
-  color: #0051a8;          /* 마우스 올렸을 때 진한 파란색 */
+  color: #0051a8;
 }
 
-/* ✅ 메인 화면에서 중앙 정렬용 (홈 화면 전용) */
+/* ✅ 홈 중앙 정렬 */
 .home-center {
-  height: calc(100vh - 80px);  /* 화면 높이에서 네비게이션 제외한 높이 */
+  height: calc(100vh - 80px);
   display: flex;
-  flex-direction: column;     /* 세로 정렬 */
-  justify-content: center;    /* 수직 가운데 정렬 */
-  align-items: center;        /* 가로 가운데 정렬 */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
 }
 
-/* ✅ 일반 콘텐츠 공통 스타일 (작성/목록 페이지 등) */
+/* ✅ 공통 콘텐츠 */
 .main-content {
-  max-width: 700px;           /* 최대 너비 */
-  margin: 2rem auto;          /* 가운데 정렬 + 위아래 여백 */
+  max-width: 700px;
+  margin: 2rem auto;
   padding: 1rem;
   text-align: center;
 }
 
-/* ✅ 버튼 스타일 */
+/* ✅ 버튼 */
 button {
-  background-color: #007aff;  /* 파란 배경 */
+  background-color: #007aff;
   color: #fff;
   border: none;
-  border-radius: 12px;        /* 둥근 버튼 */
+  border-radius: 12px;
   padding: 0.8rem 1.5rem;
   font-size: 1rem;
   font-weight: bold;
@@ -80,10 +80,10 @@ button {
 }
 
 button:hover {
-  background-color: #0051a8;  /* 마우스 올렸을 때 더 진한 파란색 */
+  background-color: #0051a8;
 }
 
-/* ✅ 일기 작성 폼 스타일 */
+/* ✅ 폼 요소 */
 form {
   background: #fff;
   padding: 2rem;
@@ -95,8 +95,9 @@ form {
   margin-top: 2rem;
 }
 
-input[type="text"],
-textarea {
+input,
+textarea,
+select {
   padding: 1rem;
   font-size: 1rem;
   border: 1px solid #ddd;
@@ -107,23 +108,16 @@ textarea {
 
 textarea {
   min-height: 150px;
-  resize: vertical;  /* 세로로만 크기 조절 가능 */
+  resize: vertical;
 }
 
-/* ✅ 정렬 드롭다운 */
 label,
 select {
   font-size: 1rem;
   margin-bottom: 1rem;
 }
 
-select {
-  padding: 0.5rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
-/* ✅ 일기 목록 스타일 */
+/* ✅ 일기 목록 */
 ul#diary-list {
   list-style: none;
   padding: 0;
@@ -141,7 +135,6 @@ ul#diary-list li {
   text-align: left;
 }
 
-/* 🗑️ 삭제 버튼 스타일 (일기 오른쪽 상단) */
 ul#diary-list button {
   background-color: #ff3b30;
   position: absolute;
@@ -152,10 +145,10 @@ ul#diary-list button {
 }
 
 ul#diary-list button:hover {
-  background-color: #d9231d;  /* 진한 빨강 */
+  background-color: #d9231d;
 }
 
-/* ✅ 반응형 디자인 (모바일 대응) */
+/* ✅ 반응형 */
 @media (max-width: 768px) {
   .nav-bar {
     flex-direction: column;
@@ -163,11 +156,52 @@ ul#diary-list button:hover {
   }
 
   .nav-title {
-    text-align: left;
     margin-bottom: 0.5rem;
   }
 
   .nav-menu {
     justify-content: flex-start;
   }
+}
+
+/* ✅ 모달 배경 */
+#modal-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 999;
+}
+
+/* ✅ 모달 창 */
+#modal-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 10px;
+  padding: 20px 30px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  z-index: 1000;
+  display: none;
+  text-align: center;
+  font-size: 1.1em;
+}
+
+#modal-ok {
+  margin-top: 20px;
+  padding: 6px 14px;
+  background: #2980b9;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#modal-ok:hover {
+  background: #3498db;
 }

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>🔐 로그인</title>
+  <link rel="stylesheet" href="/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- 상단 네비게이션 -->
+<nav class="nav-bar">
+  <h1 class="nav-title">📘 나의 일기장</h1>
+</nav>
+
+<main class="main-content" style="max-width: 400px">
+  <h2>🔐 로그인</h2>
+
+  <!-- 로그인 폼 -->
+  <form id="loginForm">
+    <input name="username" placeholder="아이디" required>
+    <input name="password" type="password" placeholder="비밀번호" required>
+    <button>Login</button>
+  </form>
+
+  <p id="msg" style="color:red;"></p>
+</main>
+
+<script>
+  /* 폼 제출했을 때 javascript 로 서버와 대화 */
+  document.getElementById('loginForm').onsubmit = async e => {
+    e.preventDefault();                             // 새로고침 막기
+    const body = Object.fromEntries(new FormData(e.target)); // {username:'',password:''}
+
+    const res = await fetch('/users/login', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      credentials: 'include',                      // ⭐ 세션 쿠키 교환
+      body: JSON.stringify(body)
+    });
+
+    if (res.ok) {                                  // 성공
+      location.href = '/index.html';
+    } else {                                       // 실패 → 메시지 표기
+      document.getElementById('msg').textContent = await res.text();
+    }
+  };
+</script>
+
+</body>
+</html>

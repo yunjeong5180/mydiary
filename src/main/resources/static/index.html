@@ -1,37 +1,70 @@
-<!DOCTYPE html> <!-- 이 문서가 HTML5 형식이라는 선언 -->
-<html lang="ko"> <!-- 이 문서의 기본 언어는 한국어 -->
-
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-    <meta charset="UTF-8"> <!-- 문자 인코딩: 한글 등 다양한 문자 지원 -->
-    <title>나의 일기장 - 홈</title> <!-- 브라우저 탭에 표시될 제목 -->
-
-    <!-- 스타일(CSS) 파일 연결 -->
+    <meta charset="UTF-8">
+    <title>나의 일기장 - 홈</title>
     <link rel="stylesheet" href="/style.css">
-
-    <!-- 한글 웹폰트(Noto Sans KR) 불러오기 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<!-- 상단에 고정된 네비게이션 바 -->
+<!-- ─── 네비게이션 바 ───────────────────────────── -->
 <nav class="nav-bar">
-    <!-- 왼쪽 상단 제목 (브랜드 역할) -->
     <h1 class="nav-title">📘 나의 일기장</h1>
+    <button id="logoutBtn" style="margin-left:auto; display:none;">Logout</button>
 </nav>
 
-<!-- 중앙에 보여줄 메인 콘텐츠 영역 -->
+<!-- ─── 메인 영역 ──────────────────────────────── -->
 <main class="home-center">
-    <!-- 사용자에게 안내 메시지 -->
     <h2>오늘의 일기를 기록해보세요 😊</h2>
-
-    <!-- 아래는 두 개의 주요 기능 버튼 -->
-    <!-- ✍️ 버튼: 일기 작성 페이지로 이동 -->
-    <a href="/write.html"><button>✍️ 새 일기 작성</button></a>
-
-    <!-- 📋 버튼: 저장된 일기 목록 보기 페이지로 이동 -->
-    <a href="/list.html"><button>📋 일기 목록 보기</button></a>
+    <button id="writeBtn">✍️ 새 일기 작성</button>
+    <button id="listBtn">📋 일기 목록 보기</button>
 </main>
+
+<!-- ✅ 로그인 안내 모달 -->
+<div id="modal-backdrop" style="display:none;">
+    <div id="modal-box" style="display:none;">
+        <p>로그인이 필요합니다 😅</p>
+        <button id="modal-ok">로그인하러 가기</button>
+    </div>
+</div>
+
+<script>
+    // ✅ 로그인 상태일 때만 로그아웃 버튼 보이기
+    fetch("/users/me", { credentials: "include" })
+      .then(res => {
+        if (res.ok) {
+          document.getElementById("logoutBtn").style.display = "inline-block";
+        }
+      });
+
+    // ✅ 로그아웃 처리
+    document.getElementById("logoutBtn").onclick = async () => {
+      await fetch('/users/logout', { method: 'POST', credentials: 'include' });
+      location.href = '/login.html';
+    };
+
+    // ✅ 로그인 체크 후 이동 (모달 표시)
+    function checkAndMove(path) {
+      fetch("/users/me", { credentials: "include" })
+        .then(res => {
+          if (res.ok) {
+            location.href = path;
+          } else {
+            document.getElementById("modal-backdrop").style.display = "block";
+            document.getElementById("modal-box").style.display = "block";  // ✅ 이 부분 추가!
+          }
+        });
+    }
+
+    document.getElementById("writeBtn").onclick = () => checkAndMove("/write.html");
+    document.getElementById("listBtn").onclick  = () => checkAndMove("/list.html");
+
+    // ✅ 모달 내 "확인" 버튼 → 로그인 페이지 이동
+    document.getElementById("modal-ok").onclick = () => {
+      location.href = "/login.html";
+    };
+</script>
 
 </body>
 </html>

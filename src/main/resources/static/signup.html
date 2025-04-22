@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>📝 회원가입</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <style>
+        .form-group {
+          display: flex;
+          align-items: center;
+          margin-bottom: 12px;
+        }
+        .form-group label {
+          width: 130px;
+          font-weight: bold;
+        }
+        .form-group input,
+        .form-group select {
+          flex: 1;
+          padding: 6px;
+        }
+        .form-note {
+          font-size: 0.9em;
+          color: #777;
+          margin: -10px 0 6px 130px;
+        }
+        #passwordMatchMsg {
+          margin-left: 10px;
+          font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav-bar">
+    <h1 class="nav-title">📘 나의 일기장</h1>
+</nav>
+
+<main class="main-content" style="max-width: 600px">
+    <h2>📝 회원가입</h2>
+
+    <form id="signupForm">
+        <div class="form-group">
+            <label for="name">이름</label>
+            <input name="name" id="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="birth">생년월일</label>
+            <input name="birth" id="birth" type="date" required>
+        </div>
+
+        <div class="form-group">
+            <label for="gender">성별</label>
+            <select name="gender" id="gender" required>
+                <option value="">선택</option>
+                <option value="male">남자</option>
+                <option value="female">여자</option>
+                <option value="other">기타</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="email">이메일</label>
+            <input name="email" id="email" type="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">연락처</label>
+            <input name="phone" id="phone" type="tel" required>
+        </div>
+
+        <div class="form-group">
+            <label for="username">아이디</label>
+            <input name="username" id="username" required minlength="4">
+        </div>
+
+        <div class="form-group">
+            <label for="password">비밀번호</label>
+            <input name="password" id="password" type="password" required minlength="6">
+        </div>
+
+        <div class="form-note">비밀번호를 다시 입력해주세요</div>
+
+        <div class="form-group">
+            <label for="confirmPassword">비밀번호 확인</label>
+            <input name="confirmPassword" id="confirmPassword" type="password" required>
+            <span id="passwordMatchMsg"></span>
+        </div>
+
+        <button>회원가입</button>
+    </form>
+
+    <p id="msg" style="color:red; margin-top: 10px;"></p>
+
+    <p style="margin-top: 20px;">
+        이미 계정이 있으시나요?
+        <a href="/login.html">로그인하러 가기 →</a>
+    </p>
+</main>
+
+<script>
+    const password = document.getElementById("password");
+    const confirm = document.getElementById("confirmPassword");
+    const matchMsg = document.getElementById("passwordMatchMsg");
+
+    // ✅ 실시간 비밀번호 일치 확인
+    confirm.addEventListener("input", () => {
+      if (confirm.value === "") {
+        matchMsg.textContent = "";
+      } else if (password.value === confirm.value) {
+        matchMsg.textContent = "✔ 일치!";
+        matchMsg.style.color = "green";
+      } else {
+        matchMsg.textContent = "❌ 불일치";
+        matchMsg.style.color = "red";
+      }
+    });
+
+    document.getElementById('signupForm').onsubmit = async e => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+
+      if (data.password !== data.confirmPassword) {
+        document.getElementById("msg").textContent = "❌ 비밀번호가 일치하지 않습니다.";
+        return;
+      }
+
+      const res = await fetch('/users/signup', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+
+      if (res.ok) {
+        alert("회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.");
+        location.href = '/login.html';
+      } else {
+        document.getElementById("msg").textContent = await res.text();
+      }
+    };
+</script>
+
+</body>
+</html>
