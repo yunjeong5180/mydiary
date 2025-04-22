@@ -9,26 +9,33 @@
 
 <body>
 
+<!-- 상단 네비게이션 바 -->
 <nav class="nav-bar">
   <h1 class="nav-title">📘 나의 일기장</h1>
   <div class="nav-menu">
     <a href="/index.html">🏠 홈</a>
     <a href="/write.html">✍️ 작성</a>
+    <!-- 🔒 로그인된 사람만 보이는 로그아웃 버튼 (처음엔 숨김) -->
     <button id="logoutBtn" style="margin-left:10px; display: none;">Logout</button>
   </div>
 </nav>
 
+<!-- 본문 내용 -->
 <main class="main-content">
   <h2>📋 일기 목록</h2>
+
+  <!-- 정렬 방식 선택 -->
   <label for="sort">정렬:</label>
   <select id="sort">
     <option value="desc">최신순</option>
     <option value="asc">오래된순</option>
   </select>
+
+  <!-- 📋 일기 항목들이 들어갈 자리 -->
   <ul id="diary-list"></ul>
 </main>
 
-<!-- ✅ 로그인 안내 모달 -->
+<!-- 로그인 안내 모달 (로그인 안 됐을 때 표시) -->
 <div id="modal-backdrop" style="display: none;">
   <div id="modal-box" style="display: none;">
     <p>로그인이 필요합니다 😅</p>
@@ -37,58 +44,86 @@
 </div>
 
 <script>
-  // ✅ 로그인 확인 → 로그아웃 버튼 표시 & 목록 로드
+  // ✅ 로그인 여부 확인 후 처리
   fetch("/users/me", { credentials: "include" })
-    .then(res => {
-      if (res.ok) {
+    .then(res =>
+    {
+      if (res.ok)
+      {
+        // 🔐 로그인 되어있으면 로그아웃 버튼 보이고, 일기 불러오기 실행
         document.getElementById("logoutBtn").style.display = "inline-block";
         loadDiaries();
-      } else {
+      } else
+      {
+        // ❌ 로그인 안 되어있으면 모달 보여줌
         document.getElementById("modal-backdrop").style.display = "block";
-        document.getElementById("modal-box").style.display = "block"; // ✅ 추가!
+        document.getElementById("modal-box").style.display = "block";
       }
     });
 
-  // ✅ 로그아웃 버튼 동작
-  document.getElementById("logoutBtn").onclick = async () => {
-    await fetch('/users/logout', { method: 'POST', credentials: 'include' });
+  // ✅ 로그아웃 버튼 클릭 시 로그아웃 처리 후 로그인 페이지로 이동
+  document.getElementById("logoutBtn").onclick = async () =>
+  {
+    await fetch('/users/logout',
+    {
+      method: 'POST',
+      credentials: 'include'
+    });
     location.href = '/login.html';
   };
 
-  document.getElementById("modal-ok").onclick = () => {
+  // ✅ 모달에서 "로그인하러 가기" 버튼 클릭 시
+  document.getElementById("modal-ok").onclick = () =>
+  {
     location.href = "/login.html";
   };
 
   const diaryList = document.getElementById("diary-list");
 
-  async function deleteDiary(id) {
-    const res = await fetch(`/diaries/${id}`, {
+  // 🗑️ 일기 삭제 함수
+  async function deleteDiary(id)
+  {
+    const res = await fetch(`/diaries/${id}`,
+    {
       method: "DELETE",
       credentials: "include"
     });
-    if (res.ok) loadDiaries();
-    else if (res.status === 401) {
+
+    if (res.ok)
+    {
+      loadDiaries();  // 삭제 후 다시 불러오기
+    } else if (res.status === 401)
+    {
+      // ❌ 로그인 만료 → 모달 표시
       document.getElementById("modal-backdrop").style.display = "block";
-      document.getElementById("modal-box").style.display = "block"; // ✅ 추가!
+      document.getElementById("modal-box").style.display = "block";
     }
   }
 
-  async function loadDiaries() {
-    const sort = document.getElementById("sort").value;
-    const res = await fetch(`/diaries?sort=${sort}`, {
+  // 📥 일기 목록 불러오기
+  async function loadDiaries()
+  {
+    const sort = document.getElementById("sort").value;  // 정렬 방식 가져오기
+
+    const res = await fetch(`/diaries?sort=${sort}`,
+    {
       credentials: "include"
     });
 
-    if (res.status === 401) {
+    if (res.status === 401)
+    {
+      // ❌ 세션 만료 → 모달 표시
       document.getElementById("modal-backdrop").style.display = "block";
-      document.getElementById("modal-box").style.display = "block"; // ✅ 추가!
+      document.getElementById("modal-box").style.display = "block";
       return;
     }
 
     const data = await res.json();
-    diaryList.innerHTML = "";
+    diaryList.innerHTML = "";  // 기존 목록 지우기
 
-    data.forEach(d => {
+    // 🔁 받아온 일기들을 화면에 표시
+    data.forEach(d =>
+    {
       const li = document.createElement("li");
       li.innerHTML = `
         <strong>${d.title}</strong><br>
@@ -100,6 +135,7 @@
     });
   }
 
+  // 🔁 정렬 방식이 바뀌면 목록 다시 불러오기
   document.getElementById("sort").addEventListener("change", loadDiaries);
 </script>
 

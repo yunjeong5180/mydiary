@@ -8,20 +8,23 @@
 </head>
 <body>
 
-<!-- ─── 네비게이션 바 ───────────────────────────── -->
+<!-- 상단 네비게이션 바 -->
 <nav class="nav-bar">
     <h1 class="nav-title">📘 나의 일기장</h1>
+    <!-- 🔒 로그인 상태일 때만 보일 로그아웃 버튼 (처음엔 숨김) -->
     <button id="logoutBtn" style="margin-left:auto; display:none;">Logout</button>
 </nav>
 
-<!-- ─── 메인 영역 ──────────────────────────────── -->
+<!-- 메인 콘텐츠 -->
 <main class="home-center">
     <h2>오늘의 일기를 기록해보세요 😊</h2>
+    <!-- ✍️ 새 일기 작성 버튼 -->
     <button id="writeBtn">✍️ 새 일기 작성</button>
+    <!-- 📋 일기 목록 보기 버튼 -->
     <button id="listBtn">📋 일기 목록 보기</button>
 </main>
 
-<!-- ✅ 로그인 안내 모달 -->
+<!-- 로그인 안내 모달 (초기엔 숨김) -->
 <div id="modal-backdrop" style="display:none;">
     <div id="modal-box" style="display:none;">
         <p>로그인이 필요합니다 😅</p>
@@ -30,38 +33,59 @@
 </div>
 
 <script>
-    // ✅ 로그인 상태일 때만 로그아웃 버튼 보이기
-    fetch("/users/me", { credentials: "include" })
-      .then(res => {
-        if (res.ok) {
+    // [1] 로그인 상태일 때만 Logout 버튼 보여주기
+    fetch("/users/me",
+    {
+        credentials: "include"
+    })
+      .then(res =>
+      {
+        if (res.ok)
+        {
           document.getElementById("logoutBtn").style.display = "inline-block";
         }
       });
 
-    // ✅ 로그아웃 처리
-    document.getElementById("logoutBtn").onclick = async () => {
-      await fetch('/users/logout', { method: 'POST', credentials: 'include' });
+    // [2] Logout 버튼 클릭 → 로그아웃 처리 후 로그인 페이지로 이동
+    document.getElementById("logoutBtn").onclick = async () =>
+    {
+      await fetch('/users/logout',
+      {
+        method: 'POST',
+        credentials: 'include'
+      });
       location.href = '/login.html';
     };
 
-    // ✅ 로그인 체크 후 이동 (모달 표시)
-    function checkAndMove(path) {
-      fetch("/users/me", { credentials: "include" })
-        .then(res => {
-          if (res.ok) {
+    // [3] 버튼 클릭 시 로그인 상태 확인 → 이동 또는 모달 표시
+    function checkAndMove(path)
+    {
+      fetch("/users/me",
+      {
+        credentials: "include"
+      })
+        .then(res =>
+        {
+          if (res.ok)
+          {
+            // 🔐 로그인되어 있으면 해당 경로로 이동
             location.href = path;
-          } else {
+          } else
+          {
+            // ❌ 로그인 안 되어 있으면 모달 표시
             document.getElementById("modal-backdrop").style.display = "block";
-            document.getElementById("modal-box").style.display = "block";  // ✅ 이 부분 추가!
+            document.getElementById("modal-box").style.display = "block";
           }
         });
     }
 
+    // 🔽 버튼 클릭 시 로그인 여부 체크
     document.getElementById("writeBtn").onclick = () => checkAndMove("/write.html");
     document.getElementById("listBtn").onclick  = () => checkAndMove("/list.html");
 
-    // ✅ 모달 내 "확인" 버튼 → 로그인 페이지 이동
-    document.getElementById("modal-ok").onclick = () => {
+    // [4] 모달 안의 "로그인하러 가기" 버튼 → 로그인 페이지 이동
+    document.getElementById("modal-ok").onclick = () =>
+    {
       location.href = "/login.html";
     };
 </script>

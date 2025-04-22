@@ -3,43 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <title>📝 회원가입</title>
+
+    <!-- 스타일 시트 / 웹폰트 불러오기 -->
     <link rel="stylesheet" href="/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
     <style>
+        /* 👉 입력 라벨 + 입력창 한 줄에 정렬 */
         .form-group {
           display: flex;
           align-items: center;
           margin-bottom: 12px;
         }
+
+        /* 👉 왼쪽 라벨 너비 고정 */
         .form-group label {
           width: 130px;
           font-weight: bold;
         }
+
+        /* 👉 오른쪽 입력창 (input, select) */
         .form-group input,
         .form-group select {
           flex: 1;
           padding: 6px;
         }
+
+        /* 🔍 힌트 설명 텍스트 */
         .form-note {
           font-size: 0.9em;
           color: #777;
           margin: -10px 0 6px 130px;
         }
+
+        /* ✔ 비밀번호 일치/불일치 메시지 */
         #passwordMatchMsg {
           margin-left: 10px;
           font-weight: bold;
         }
     </style>
 </head>
+
 <body>
 
+<!-- 상단 네비게이션 바 -->
 <nav class="nav-bar">
     <h1 class="nav-title">📘 나의 일기장</h1>
 </nav>
 
+<!-- 본문 내용 -->
 <main class="main-content" style="max-width: 600px">
     <h2>📝 회원가입</h2>
 
+    <!-- 회원가입 폼 -->
     <form id="signupForm">
         <div class="form-group">
             <label for="name">이름</label>
@@ -92,10 +108,12 @@
         <button>회원가입</button>
     </form>
 
+    <!-- ❗ 오류 메시지 -->
     <p id="msg" style="color:red; margin-top: 10px;"></p>
 
+    <!-- 로그인 링크 -->
     <p style="margin-top: 20px;">
-        이미 계정이 있으시나요?
+        이미 계정이 있으신가요?
         <a href="/login.html">로그인하러 가기 →</a>
     </p>
 </main>
@@ -105,39 +123,55 @@
     const confirm = document.getElementById("confirmPassword");
     const matchMsg = document.getElementById("passwordMatchMsg");
 
-    // ✅ 실시간 비밀번호 일치 확인
-    confirm.addEventListener("input", () => {
-      if (confirm.value === "") {
+    // ✅ 비밀번호와 확인값이 일치하는지 실시간 체크
+    confirm.addEventListener("input", () =>
+    {
+      if (confirm.value === "")
+      {
         matchMsg.textContent = "";
-      } else if (password.value === confirm.value) {
+      } else if (password.value === confirm.value)
+      {
         matchMsg.textContent = "✔ 일치!";
         matchMsg.style.color = "green";
-      } else {
+      } else
+      {
         matchMsg.textContent = "❌ 불일치";
         matchMsg.style.color = "red";
       }
     });
 
-    document.getElementById('signupForm').onsubmit = async e => {
-      e.preventDefault();
+    // ✅ 회원가입 요청 보내기
+    document.getElementById('signupForm').onsubmit = async e =>
+    {
+      e.preventDefault(); // 기본 폼 동작 막기
+
       const formData = new FormData(e.target);
       const data = Object.fromEntries(formData.entries());
 
-      if (data.password !== data.confirmPassword) {
+      // ❌ 비밀번호 불일치
+      if (data.password !== data.confirmPassword)
+      {
         document.getElementById("msg").textContent = "❌ 비밀번호가 일치하지 않습니다.";
         return;
       }
 
-      const res = await fetch('/users/signup', {
+      // ✅ 서버에 회원가입 요청 보내기
+      const res = await fetch('/users/signup',
+      {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers:
+        {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify(data)
       });
 
-      if (res.ok) {
+      if (res.ok)
+      {
         alert("회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.");
         location.href = '/login.html';
-      } else {
+      } else
+      {
         document.getElementById("msg").textContent = await res.text();
       }
     };

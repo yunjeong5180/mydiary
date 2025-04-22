@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>🔐 로그인</title>
+
+  <!-- 공통 스타일 시트 및 한글 폰트 불러오기 -->
   <link rel="stylesheet" href="/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
 </head>
@@ -14,35 +16,49 @@
   <h1 class="nav-title">📘 나의 일기장</h1>
 </nav>
 
+<!-- 로그인 폼 영역 -->
 <main class="main-content" style="max-width: 400px">
   <h2>🔐 로그인</h2>
 
-  <!-- 로그인 폼 -->
+  <!-- 아이디 / 비밀번호 입력 폼 -->
   <form id="loginForm">
     <input name="username" placeholder="아이디" required>
     <input name="password" type="password" placeholder="비밀번호" required>
     <button>Login</button>
   </form>
 
+  <!-- ❌ 실패 메시지 표시 영역 -->
   <p id="msg" style="color:red;"></p>
 </main>
 
 <script>
-  /* 폼 제출했을 때 javascript 로 서버와 대화 */
-  document.getElementById('loginForm').onsubmit = async e => {
-    e.preventDefault();                             // 새로고침 막기
-    const body = Object.fromEntries(new FormData(e.target)); // {username:'',password:''}
+  // ✅ 로그인 폼 제출 시 서버에 로그인 요청 보내기
+  document.getElementById('loginForm').onsubmit = async e =>
+  {
+    e.preventDefault(); // 새로고침 방지
 
-    const res = await fetch('/users/login', {
+    // 사용자가 입력한 아이디/비밀번호를 객체로 변환
+    const body = Object.fromEntries(new FormData(e.target));  // {username: "...", password: "..."}
+
+    // 서버에 로그인 요청
+    const res = await fetch('/users/login',
+    {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      credentials: 'include',                      // ⭐ 세션 쿠키 교환
+      headers:
+      {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',         // 세션 쿠키 포함 (← 로그인 유지에 꼭 필요)
       body: JSON.stringify(body)
     });
 
-    if (res.ok) {                                  // 성공
+    if (res.ok)
+    {
+      // ✅ 로그인 성공 → 홈 화면으로 이동
       location.href = '/index.html';
-    } else {                                       // 실패 → 메시지 표기
+    } else
+    {
+      // ❌ 실패 메시지를 표시
       document.getElementById('msg').textContent = await res.text();
     }
   };

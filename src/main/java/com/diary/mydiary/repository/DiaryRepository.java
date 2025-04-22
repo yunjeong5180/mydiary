@@ -2,18 +2,32 @@ package com.diary.mydiary.repository;
 
 import com.diary.mydiary.model.Diary;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 
-// 🔸 이 인터페이스는 DB에 데이터를 저장하고 불러오는 기능을 자동으로 제공해줌
-//     예: 저장하기, 전체 조회하기, 삭제하기 등 기본 기능은 JpaRepository가 다 처리해줘!
+/**
+ * 📁 [DiaryRepository] - 일기 데이터를 DB에서 저장하고 불러오는 역할
+ *
+ * 이 인터페이스는 Spring Data JPA에서 제공하는 JpaRepository를 상속하여,
+ * 기본적인 CRUD 기능(저장, 조회, 삭제 등)을 자동으로 사용할 수 있게 해줍니다.
+ *
+ * 또한, 작성일(createdAt)을 기준으로 정렬된 일기 목록을 가져오는
+ * 커스텀 쿼리 메서드도 포함되어 있어요!
+ */
+public interface DiaryRepository extends JpaRepository<Diary, Long>
+{
 
-public interface DiaryRepository extends JpaRepository<Diary, Long> {
-
-    // 🔽 최신순 정렬로 전체 일기 불러오기
-    //     → createdAt(작성 시간) 기준으로 가장 최근에 쓴 일기가 먼저 나옴
+    /**
+     * 🔽 최신순 정렬
+     * DB에서 createdAt 필드를 기준으로
+     * 최신 순서대로(최근 작성된 순) 모든 일기를 불러옵니다.
+     */
     List<Diary> findAllByOrderByCreatedAtDesc();
 
-    // 🔼 오래된순 정렬로 전체 일기 불러오기
-    //     → createdAt(작성 시간) 기준으로 가장 오래된 일기부터 보여줌
+    /**
+     * 🔼 오래된순 정렬
+     * DB에서 createdAt 필드를 기준으로
+     * 가장 오래된 일기부터 차례로 모든 일기를 불러옵니다.
+     */
     List<Diary> findAllByOrderByCreatedAtAsc();
 }

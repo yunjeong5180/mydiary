@@ -1,72 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<!-- 💡 프로젝트 기본 정보 -->
 	<modelVersion>4.0.0</modelVersion>
+
+	<!-- ✅ Spring Boot의 부모 설정 (기본 세팅, 의존성 버전 자동 맞춰줌) -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
+
+	<!-- 📦 그룹/이름/버전 정의 -->
 	<groupId>com.diary</groupId>
 	<artifactId>mydiary</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>mydiary</name>
 	<description>Demo project for Spring Boot</description>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
+
+	<!-- 🛠️ Java 버전 설정 -->
 	<properties>
 		<java.version>17</java.version>
 	</properties>
 
+	<!-- ✅ 의존성 목록 (앱에 필요한 기능별 라이브러리) -->
 	<dependencies>
-		<!-- 기본 웹/JPA/H2/Lombok -->
+		<!-- 🌐 웹 기능 (Controller, REST API 등) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- 💾 JPA (DB 연결, 엔티티 저장 등) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
+		<!-- 🧪 테스트용 메모리 DB (H2) -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- 🦾 Lombok (Getter/Setter 자동 생성 등) -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
 
-		<!-- 👉 비밀번호 암호화만 쓸 때는 ‘spring‑security‑crypto’ 만 있으면 된다 -->
+		<!-- 🔐 비밀번호 암호화용 (Spring Security 전체 말고 crypto만!) -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-crypto</artifactId>
+			<artifactId>spring-security-crypto</artifactId> <!-- 로그인할 때 비밀번호를 암호화하기 위해 사용 중. -->
 		</dependency>
 
-		<!-- DevTools / Test -->
+		<!-- 🔁 실시간 반영 (HTML/CSS 수정하면 자동 리로드됨 - 개발 전용) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
+			<artifactId>spring-boot-devtools</artifactId> <!-- HTML이나 CSS 수정 후 자동 새로고침해주는 개발자 편의 기능 -->
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+
+		<!-- 🧪 테스트용 기본 설정 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -74,8 +76,10 @@
 		</dependency>
 	</dependencies>
 
+	<!-- ⚙️ 빌드 설정 -->
 	<build>
 		<plugins>
+			<!-- ✏️ Java 컴파일러 설정 (Lombok 주석 처리용) -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -84,16 +88,19 @@
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
-							<version>1.18.30</version> <!-- ✅ 버전 명시 -->
+							<version>1.18.30</version> <!-- ✅ Lombok 버전 명시 -->
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+
+			<!-- 🚀 Spring Boot 애플리케이션 빌드 도구 -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<excludes>
+						<!-- ✅ Lombok은 컴파일 시점에만 필요하므로 최종 패키징 제외 -->
 						<exclude>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
