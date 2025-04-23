@@ -1,47 +1,41 @@
 /* ✅ 전체 초기화 설정 */
-*
-{
-  box-sizing: border-box; /* padding, border 포함한 너비 계산 */
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-body
-{
+body {
   font-family: 'Helvetica Neue', 'Noto Sans KR', sans-serif;
-  background-color: #f9f9f9; /* 밝은 회색 배경 */
-  color: #1c1c1e;            /* 거의 검정에 가까운 글씨 */
+  background-color: #f9f9f9;
+  color: #1c1c1e;
 }
 
 /* ✅ 상단 네비게이션 바 */
-.nav-bar
-{
+.nav-bar {
   background-color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05); /* 아래쪽 그림자 */
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
-  z-index: 1000; /* 다른 요소보다 위에 표시 */
+  z-index: 1000;
 }
 
-.nav-title
-{
+.nav-title {
   font-size: 1.8rem;
   font-weight: bold;
-  color: #007aff; /* 애플 느낌의 파란색 */
+  color: #007aff;
 }
 
-.nav-menu
-{
+.nav-menu {
   display: flex;
   gap: 1rem;
 }
 
-.nav-menu a
-{
+.nav-menu a {
   text-decoration: none;
   color: #007aff;
   font-weight: 500;
@@ -49,15 +43,13 @@ body
   transition: color 0.2s ease;
 }
 
-.nav-menu a:hover
-{
-  color: #0051a8; /* 마우스 오버시 진한 파랑 */
+.nav-menu a:hover {
+  color: #0051a8;
 }
 
 /* ✅ 홈 페이지 중앙 정렬용 */
-.home-center
-{
-  height: calc(100vh - 80px); /* 화면 전체 높이 - 네비게이션 높이 */
+.home-center {
+  height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -66,8 +58,7 @@ body
 }
 
 /* ✅ 메인 콘텐츠 공통 스타일 */
-.main-content
-{
+.main-content {
   max-width: 700px;
   margin: 2rem auto;
   padding: 1rem;
@@ -75,8 +66,7 @@ body
 }
 
 /* ✅ 버튼 스타일 */
-button
-{
+button {
   background-color: #007aff;
   color: #fff;
   border: none;
@@ -89,14 +79,12 @@ button
   margin: 0.5rem;
 }
 
-button:hover
-{
+button:hover {
   background-color: #0051a8;
 }
 
 /* ✅ 입력폼 공통 스타일 */
-form
-{
+form {
   background: #fff;
   padding: 2rem;
   border-radius: 20px;
@@ -109,8 +97,7 @@ form
 
 input,
 textarea,
-select
-{
+select {
   padding: 1rem;
   font-size: 1rem;
   border: 1px solid #ddd;
@@ -119,29 +106,25 @@ select
   width: 100%;
 }
 
-textarea
-{
+textarea {
   min-height: 150px;
-  resize: vertical; /* 세로 크기만 조절 가능 */
+  resize: vertical;
 }
 
 label,
-select
-{
+select {
   font-size: 1rem;
   margin-bottom: 1rem;
 }
 
 /* ✅ 일기 목록 리스트 스타일 */
-ul#diary-list
-{
+ul#diary-list {
   list-style: none;
   padding: 0;
   margin-top: 2rem;
 }
 
-ul#diary-list li
-{
+ul#diary-list li {
   background: white;
   padding: 1.2rem;
   border-radius: 16px;
@@ -153,8 +136,7 @@ ul#diary-list li
 }
 
 /* 🗑️ 삭제 버튼 */
-ul#diary-list button
-{
+ul#diary-list button {
   background-color: #ff3b30;
   position: absolute;
   right: 16px;
@@ -163,34 +145,28 @@ ul#diary-list button
   padding: 0.4rem 0.8rem;
 }
 
-ul#diary-list button:hover
-{
+ul#diary-list button:hover {
   background-color: #d9231d;
 }
 
-/* ✅ 모바일 대응 (화면 좁을 때) */
-@media (max-width: 768px)
-{
-  .nav-bar
-  {
+/* ✅ 모바일 대응 */
+@media (max-width: 768px) {
+  .nav-bar {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .nav-title
-  {
+  .nav-title {
     margin-bottom: 0.5rem;
   }
 
-  .nav-menu
-  {
+  .nav-menu {
     justify-content: flex-start;
   }
 }
 
-/* ✅ 모달 배경 (반투명 검정) */
-#modal-backdrop
-{
+/* ✅ 모달 배경 */
+#modal-backdrop {
   display: none;
   position: fixed;
   top: 0; left: 0;
@@ -201,8 +177,7 @@ ul#diary-list button:hover
 }
 
 /* ✅ 모달 박스 */
-#modal-box
-{
+#modal-box {
   display: none;
   position: fixed;
   top: 50%; left: 50%;
@@ -216,9 +191,8 @@ ul#diary-list button:hover
   font-size: 1.1em;
 }
 
-/* ✅ 모달 내 확인 버튼 */
-#modal-ok
-{
+/* ✅ 모달 확인 버튼 */
+#modal-ok {
   margin-top: 20px;
   padding: 6px 14px;
   background: #2980b9;
@@ -228,7 +202,31 @@ ul#diary-list button:hover
   cursor: pointer;
 }
 
-#modal-ok:hover
-{
+#modal-ok:hover {
   background: #3498db;
+}
+
+/* ✅ 로그인 페이지 - 회원가입/비번찾기 버튼 */
+.extra-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.extra-buttons button {
+  background-color: #e0e0e0;
+  color: #1c1c1e;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.extra-buttons button:hover {
+  background-color: #ccc;
 }

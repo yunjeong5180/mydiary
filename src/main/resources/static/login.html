@@ -3,66 +3,181 @@
 <head>
   <meta charset="UTF-8">
   <title>🔐 로그인</title>
-
-  <!-- 공통 스타일 시트 및 한글 폰트 불러오기 -->
   <link rel="stylesheet" href="/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+  <style>
+    /* 로그인 폼 스타일 (외부 style.css에 정의하는 것이 좋습니다) */
+    .main-content {
+        max-width: 400px;
+        margin: 40px auto; /* 위아래 여백 추가 및 중앙 정렬 */
+        padding: 30px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        background-color: #fff;
+    }
+    .main-content h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #333;
+    }
+    #loginForm input {
+        width: 100%;
+        padding: 12px; /* 패딩 증가 */
+        margin-bottom: 15px; /* 여백 증가 */
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box; /* 패딩 포함 크기 계산 */
+    }
+    #loginForm button {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1.1em; /* 글자 크기 조정 */
+        transition: background-color 0.2s; /* 부드러운 색상 전환 */
+    }
+    #loginForm button:hover {
+        background-color: #0056b3;
+    }
+    #msg {
+        color: red;
+        margin-top: 15px; /* 여백 증가 */
+        text-align: center;
+        font-size: 0.9em;
+        min-height: 1.2em; /* 메시지 영역 높이 확보 */
+    }
+    .extra-buttons {
+        margin-top: 20px; /* 여백 증가 */
+        text-align: center;
+    }
+    .extra-buttons button {
+        background: none;
+        border: none;
+        color: #007bff;
+        cursor: pointer;
+        margin: 0 10px; /* 버튼 사이 여백 */
+        padding: 5px;
+        font-size: 0.9em;
+    }
+    .extra-buttons button:hover {
+        text-decoration: underline;
+    }
+  </style>
 </head>
-
 <body>
-
-<!-- 상단 네비게이션 -->
 <nav class="nav-bar">
   <h1 class="nav-title">📘 나의 일기장</h1>
 </nav>
-
-<!-- 로그인 폼 영역 -->
-<main class="main-content" style="max-width: 400px">
+<main class="main-content">
   <h2>🔐 로그인</h2>
-
-  <!-- 아이디 / 비밀번호 입력 폼 -->
   <form id="loginForm">
     <input name="username" placeholder="아이디" required>
     <input name="password" type="password" placeholder="비밀번호" required>
-    <button>Login</button>
-  </form>
-
-  <!-- ❌ 실패 메시지 표시 영역 -->
-  <p id="msg" style="color:red;"></p>
+    <button type="submit">로그인</button> </form>
+  <p id="msg"></p>
+  <div class="extra-buttons">
+    <button id="signupLinkBtn">회원가입</button> <button onclick="alert('아이디/비밀번호 찾기 기능은 준비 중입니다.')">아이디/비밀번호 찾기</button>
+  </div>
 </main>
-
 <script>
-  // ✅ 로그인 폼 제출 시 서버에 로그인 요청 보내기
-  document.getElementById('loginForm').onsubmit = async e =>
-  {
-    e.preventDefault(); // 새로고침 방지
+  document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('loginForm');
+    const msgElem = document.getElementById('msg');
+    const signupLinkBtn = document.getElementById('signupLinkBtn');
 
-    // 사용자가 입력한 아이디/비밀번호를 객체로 변환
-    const body = Object.fromEntries(new FormData(e.target));  // {username: "...", password: "..."}
+    // URL에서 redirect 파라미터 읽기
+    const urlParams = new URLSearchParams(location.search);
+    const redirectTo = urlParams.get("redirect"); // URLSearchParams가 자동으로 디코딩
 
-    // 서버에 로그인 요청
-    const res = await fetch('/users/login',
-    {
-      method: 'POST',
-      headers:
-      {
-        'Content-Type': 'application/json'
-      },
-      credentials: 'include',         // 세션 쿠키 포함 (← 로그인 유지에 꼭 필요)
-      body: JSON.stringify(body)
-    });
-
-    if (res.ok)
-    {
-      // ✅ 로그인 성공 → 홈 화면으로 이동
-      location.href = '/index.html';
-    } else
-    {
-      // ❌ 실패 메시지를 표시
-      document.getElementById('msg').textContent = await res.text();
+    // 회원가입 버튼 링크에도 redirect 파라미터 추가
+    if (redirectTo) {
+        try {
+            // 경로 유효성 검사 (간단하게)
+            if (redirectTo.startsWith('/') || redirectTo.endsWith('.html') || !redirectTo.includes(':')) {
+                 signupLinkBtn.onclick = () => {
+                     location.href = `/signup.html?redirect=${encodeURIComponent(redirectTo)}`;
+                 };
+            } else {
+                 console.warn("Invalid redirect parameter detected for signup link:", redirectTo);
+                 signupLinkBtn.onclick = () => { location.href = '/signup.html'; }; // 기본 링크
+            }
+        } catch(e) {
+             console.error("Error processing redirect for signup link:", e);
+             signupLinkBtn.onclick = () => { location.href = '/signup.html'; }; // 오류 시 기본 링크
+        }
+    } else {
+        // redirect 파라미터 없으면 기본 회원가입 링크
+        signupLinkBtn.onclick = () => { location.href = '/signup.html'; };
     }
-  };
-</script>
 
+
+    // 로그인 폼 제출 이벤트 처리
+    loginForm.onsubmit = async (e) => { // 이벤트 객체 e 명시
+      e.preventDefault(); // 폼 기본 제출 방지
+      msgElem.textContent = ''; // 이전 오류 메시지 초기화
+
+      const formData = new FormData(e.target);
+      const body = Object.fromEntries(formData.entries());
+
+      // API URL 생성 (절대 경로 사용)
+      const loginUrl = `${location.origin}/users/login`;
+
+      try {
+        // 서버에 로그인 요청 (쿠키 포함)
+        const res = await fetch(loginUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include', // 쿠키 전송/수신을 위해 필요
+          body: JSON.stringify(body)
+        });
+
+        if (res.ok) {
+          // 로그인 성공
+          console.log("Login successful. RedirectTo:", redirectTo);
+
+          // 리디렉션 경로 결정
+          let finalRedirectUrl = '/index.html'; // 기본 리디렉션 경로
+          if (redirectTo) {
+              // 경로 유효성 검사 (상대 경로 또는 .html로 끝나는 경우)
+              // 외부 URL 리디렉션 방지 (간단한 체크)
+              if ((redirectTo.startsWith('/') || redirectTo.endsWith('.html')) && !redirectTo.includes(':')) {
+                  // '/' 로 시작하도록 경로 정규화
+                  finalRedirectUrl = '/' + redirectTo.replace(/^\//, '');
+              } else {
+                  console.warn("Invalid or potentially unsafe redirect parameter ignored:", redirectTo);
+              }
+          }
+          location.href = finalRedirectUrl; // 계산된 최종 경로로 이동
+
+        } else {
+          // 로그인 실패 시 서버에서 보낸 오류 메시지를 표시
+          let errorText = '아이디 또는 비밀번호가 잘못되었습니다.'; // 기본 오류 메시지
+          try {
+            // 서버 응답이 JSON 형태일 수 있음
+            if (res.headers.get('content-type')?.includes('application/json')) {
+                const errorJson = await res.json();
+                errorText = errorJson.message || errorText;
+            } else {
+                // 텍스트 형태 응답 처리
+                const text = await res.text();
+                if (text) errorText = text;
+            }
+          } catch (parseError) {
+            console.error("Error parsing login error response:", parseError);
+          }
+          msgElem.textContent = `❌ ${errorText}`;
+        }
+      } catch (error) {
+        // 네트워크 오류 등 fetch 자체 실패
+        console.error('Login fetch error:', error);
+        msgElem.textContent = '로그인 중 오류가 발생했습니다. 네트워크를 확인해주세요.';
+      }
+    };
+  });
+</script>
 </body>
 </html>

@@ -20,9 +20,8 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/users") // 모든 URL 앞에 /users 가 붙음
-@RequiredArgsConstructor    // 생성자 주입을 자동으로 생성
-public class UserController
-{
+@RequiredArgsConstructor    // 생성자 주입 자동 생성
+public class UserController {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -34,16 +33,12 @@ public class UserController
      * - 비밀번호를 암호화한 후 사용자 정보를 저장
      */
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody User user)
-    {
-        // 1. 아이디 중복 검사
-        if (userRepository.findByUsername(user.getUsername()).isPresent())
-        {
+    public ResponseEntity<?> registerUser(@RequestBody User user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body("❌ 이미 사용 중인 아이디입니다.");
         }
 
-        // 2. 비밀번호 암호화 후 저장
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
@@ -56,28 +51,38 @@ public class UserController
      * - 아이디와 비밀번호를 검사하고, 성공 시 세션에 사용자 정보 저장
      */
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest req,
-                                        HttpSession session)
-    {
-        // 1. 아이디로 사용자 검색
+    public ResponseEntity<String> login(@RequestBody LoginRequest req, HttpSession session) {
         Optional<User> opt = userRepository.findByUsername(req.getUsername());
-        if (opt.isEmpty())
-        {
+        if (opt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("❌ 유저가 없습니다.");
         }
 
-        // 2. 비밀번호 확인
         User user = opt.get();
-        if (!passwordEncoder.matches(req.getPassword(), user.getPassword()))
-        {
+        if (!passwordEncoder.matches(req.getPassword(), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("❌ 비밀번호 오류");
         }
 
-        // 3. 로그인 성공 → 세션에 사용자 정보 저장
-        session.setAttribute("loggedInUser", user);
+        session.setAttribute("user", user); // ✅ 세션에 사용자 저장
         return ResponseEntity.ok("✅ 로그인 성공 (세션 저장)");
+    }
+
+    /**
+     * 🙋 로그인 상태 확인
+     *
+     * - 세션에서 사용자 정보가 있는지 확인
+     */
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("❌ 로그인되어 있지 않습니다.");
+        }
+
+        return ResponseEntity.ok(user);
     }
 
     /**
@@ -86,9 +91,8 @@ public class UserController
      * - 세션을 초기화하여 로그인 상태 해제
      */
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpSession session)
-    {
-        session.invalidate(); // 세션 초기화
+    public ResponseEntity<String> logout(HttpSession session) {
+        session.invalidate();
         return ResponseEntity.ok("로그아웃 완료");
     }
 }
