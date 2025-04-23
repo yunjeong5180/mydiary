@@ -2,15 +2,16 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>나의 일기장 - 홈</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 일기장 - 홈</title>
     <link rel="stylesheet" href="/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
     <style>
-        /* 기본 스타일 리셋 (선택 사항) */
+        /* ✅ 전체 초기화 스타일 */
         body, h1, h2, p, button { margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
         button { cursor: pointer; }
 
-        /* 네비게이션 바 스타일 */
+        /* ✅ 상단 네비게이션 바 */
         .nav-bar {
             display: flex;
             align-items: center;
@@ -19,19 +20,20 @@
             border-bottom: 1px solid #dee2e6;
         }
         .nav-title { font-size: 1.4em; color: #343a40; }
+
         #logoutBtn {
-            margin-left: auto; /* 오른쪽 정렬 */
+            margin-left: auto;
             padding: 8px 15px;
             font-size: 0.9em;
             background-color: #6c757d;
             color: white;
             border: none;
             border-radius: 5px;
-            display: none; /* 초기 숨김 */
+            display: none;
         }
         #logoutBtn:hover { background-color: #5a6268; }
 
-        /* 메인 콘텐츠 영역 스타일 */
+        /* ✅ 메인 콘텐츠 영역 */
         .home-center {
             text-align: center;
             padding: 50px 20px;
@@ -39,24 +41,24 @@
         .home-center h2 {
             margin-bottom: 30px;
             color: #495057;
-            font-weight: 500; /* 글꼴 두께 조정 */
+            font-weight: 500;
         }
         .home-center button {
             padding: 12px 25px;
-            font-size: 1.05em; /* 글자 크기 조정 */
+            font-size: 1.05em;
             margin: 10px;
             border-radius: 6px;
             border: 1px solid #ced4da;
-            background-color: #e9ecef; /* 배경색 변경 */
-            color: #495057; /* 글자색 변경 */
-            transition: background-color 0.2s, border-color 0.2s; /* 부드러운 전환 효과 */
+            background-color: #e9ecef;
+            color: #495057;
+            transition: background-color 0.2s, border-color 0.2s;
         }
         .home-center button:hover {
             background-color: #dee2e6;
             border-color: #adb5bd;
         }
 
-        /* 모달 스타일 - 완전히 수정됨 */
+        /* ✅ 모달 스타일 */
         .modal-container {
             display: none;
             position: fixed;
@@ -67,7 +69,6 @@
             background-color: rgba(0, 0, 0, 0.6);
             z-index: 1000;
         }
-
         .modal-content {
             position: absolute;
             top: 50%;
@@ -81,21 +82,18 @@
             max-width: 350px;
             z-index: 1001;
         }
-
         .modal-content p {
             margin-bottom: 20px;
             font-size: 1.1em;
             color: #333;
             line-height: 1.5;
         }
-
         .modal-buttons {
             display: flex;
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
         }
-
         .modal-button {
             padding: 8px 16px;
             border: none;
@@ -104,46 +102,30 @@
             cursor: pointer;
             min-width: 80px;
         }
-
-        .login-btn {
-            background-color: #007bff;
-            color: white;
-        }
-        .login-btn:hover {
-            background-color: #0069d9;
-        }
-
-        .signup-btn {
-            background-color: #28a745;
-            color: white;
-        }
-        .signup-btn:hover {
-            background-color: #218838;
-        }
-
-        .cancel-btn {
-            background-color: #6c757d;
-            color: white;
-        }
-        .cancel-btn:hover {
-            background-color: #5a6268;
-        }
+        .login-btn { background-color: #007bff; color: white; }
+        .login-btn:hover { background-color: #0069d9; }
+        .signup-btn { background-color: #28a745; color: white; }
+        .signup-btn:hover { background-color: #218838; }
+        .cancel-btn { background-color: #6c757d; color: white; }
+        .cancel-btn:hover { background-color: #5a6268; }
     </style>
 </head>
 <body>
 
+<!-- ✅ 상단 네비게이션 -->
 <nav class="nav-bar">
     <h1 class="nav-title">📘 나의 일기장</h1>
     <button id="logoutBtn">Logout</button>
 </nav>
 
+<!-- ✅ 메인 버튼 -->
 <main class="home-center">
     <h2>오늘의 일기를 기록해보세요 😊</h2>
     <button id="writeBtn">✍️ 새 일기 작성</button>
     <button id="listBtn">📋 일기 목록 보기</button>
 </main>
 
-<!-- 모달 완전히 새로 작성 -->
+<!-- ✅ 로그인 모달 -->
 <div class="modal-container" id="loginModal">
     <div class="modal-content">
         <p>로그인이 필요한 서비스입니다.<br>로그인 또는 회원가입을 해주세요.</p>
@@ -156,7 +138,7 @@
 </div>
 
 <script>
-    // DOM 요소
+    // ✅ DOM 요소 불러오기
     const writeBtn = document.getElementById('writeBtn');
     const listBtn = document.getElementById('listBtn');
     const logoutBtn = document.getElementById('logoutBtn');
@@ -165,158 +147,68 @@
     const signupBtn = document.getElementById('signupBtn');
     const cancelBtn = document.getElementById('cancelBtn');
 
-    let pendingRedirect = ''; // 리다이렉트 경로 저장
+    let pendingRedirect = ''; // 🔁 사용자가 누른 버튼 기억
 
-    // 모달 표시 함수
-    function showModal(targetPath) {
-        console.log('[Modal] Showing modal for path:', targetPath);
-        pendingRedirect = targetPath;
-        loginModal.style.display = 'block';
-
-        // 모달이 표시되었는지 확인
-        console.log('[Modal] Modal display status:', loginModal.style.display);
+    // ✅ 로그인 확인 → 페이지 이동 or 모달 띄우기
+    async function checkAndNavigate(path) {
+        const isLoggedIn = await checkLoginStatus();
+        if (isLoggedIn) {
+            window.location.href = path;
+        } else {
+            pendingRedirect = path;
+            loginModal.style.display = 'block';
+        }
     }
 
-    // 모달 숨기기 함수
-    function hideModal() {
-        console.log('[Modal] Hiding modal');
-        loginModal.style.display = 'none';
-        pendingRedirect = '';
-    }
-
-    // 로그인 상태 확인
+    // ✅ 로그인 상태 확인 함수 (세션 기반)
     async function checkLoginStatus() {
-        console.log('[Auth] Checking login status...');
-
         try {
-            const response = await fetch(`${location.origin}/users/me`, {
-                method: 'GET',
-                credentials: 'include'
+            const res = await fetch(`${location.origin}/users/me`, {
+                method: 'GET', credentials: 'include'
             });
-
-            console.log('[Auth] Status check response status:', response.status);
-
-            if (response.ok) {
-                console.log('[Auth] User is logged in.');
-                logoutBtn.style.display = 'inline-block';
-                return true;
-            } else {
-                console.log('[Auth] User is not logged in.');
-                logoutBtn.style.display = 'none';
-                return false;
-            }
-        } catch (error) {
-            console.error('[Auth] Error checking login status:', error);
+            logoutBtn.style.display = res.ok ? 'inline-block' : 'none';
+            return res.ok;
+        } catch (err) {
             logoutBtn.style.display = 'none';
             return false;
         }
     }
 
-    // 페이지 이동 또는 모달 표시
-    async function checkAndNavigate(path) {
-        console.log(`[Nav] Attempting to navigate to: ${path}`);
+    // ✅ 초기 로그인 상태 체크
+    document.addEventListener('DOMContentLoaded', checkLoginStatus);
 
-        try {
-            const isLoggedIn = await checkLoginStatus();
+    // ✅ 버튼 클릭 시 동작
+    writeBtn.onclick = () => checkAndNavigate('/write.html');
+    listBtn.onclick  = () => checkAndNavigate('/list.html');
 
-            if (isLoggedIn) {
-                console.log('[Nav] User is logged in. Redirecting...');
-                window.location.href = path;
-            } else {
-                console.log('[Nav] User is not logged in. Showing login modal.');
-                showModal(path);
-            }
-        } catch (error) {
-            console.error('[Nav] Error in navigation:', error);
-            showModal(path);
-        }
-    }
+    // ✅ 모달 버튼 처리
+    loginBtn.onclick = () => {
+        const path = pendingRedirect.replace(/^\//, '');
+        window.location.href = `/login.html?redirect=${encodeURIComponent(path)}`;
+    };
+    signupBtn.onclick = () => {
+        const path = pendingRedirect.replace(/^\//, '');
+        window.location.href = `/signup.html?redirect=${encodeURIComponent(path)}`;
+    };
+    cancelBtn.onclick = () => {
+        loginModal.style.display = 'none';
+        pendingRedirect = '';
+    };
 
-    // 이벤트 리스너
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log('[Init] Page loaded - Checking initial login status');
-        checkLoginStatus();
-    });
+    // ✅ 모달 외부 클릭 → 닫기
+    loginModal.onclick = (e) => {
+        if (e.target === loginModal) loginModal.style.display = 'none';
+    };
+    document.querySelector('.modal-content').onclick = (e) => e.stopPropagation();
 
-    // 버튼 클릭 이벤트
-    writeBtn.addEventListener('click', () => {
-        console.log('[Button] Write button clicked');
-        checkAndNavigate('/write.html');
-    });
-
-    listBtn.addEventListener('click', () => {
-        console.log('[Button] List button clicked');
-        checkAndNavigate('/list.html');
-    });
-
-    // 모달 버튼 이벤트
-    loginBtn.addEventListener('click', () => {
-        console.log('[Modal] Login button clicked');
-        let loginUrl = '/login.html';
-
-        if (pendingRedirect) {
-            try {
-                const encodedRedirect = encodeURIComponent(pendingRedirect.replace(/^\//, ''));
-                loginUrl = `/login.html?redirect=${encodedRedirect}`;
-            } catch (e) {
-                console.error('[Modal] Error encoding redirect param:', e);
-            }
-        }
-
-        window.location.href = loginUrl;
-    });
-
-    signupBtn.addEventListener('click', () => {
-        console.log('[Modal] Signup button clicked');
-        let signupUrl = '/signup.html';
-
-        if (pendingRedirect) {
-            try {
-                const encodedRedirect = encodeURIComponent(pendingRedirect.replace(/^\//, ''));
-                signupUrl = `/signup.html?redirect=${encodedRedirect}`;
-            } catch (e) {
-                console.error('[Modal] Error encoding redirect param:', e);
-            }
-        }
-
-        window.location.href = signupUrl;
-    });
-
-    cancelBtn.addEventListener('click', () => {
-        console.log('[Modal] Cancel button clicked');
-        hideModal();
-    });
-
-    // 모달 배경 클릭 시 닫기 - 모달 내용 클릭 시에는 닫히지 않도록 이벤트 버블링 방지
-    loginModal.addEventListener('click', (event) => {
-        if (event.target === loginModal) {
-            console.log('[Modal] Modal backdrop clicked');
-            hideModal();
-        }
-    });
-
-    // 모달 내부 클릭 시 이벤트 버블링 방지
-    document.querySelector('.modal-content').addEventListener('click', (event) => {
-        event.stopPropagation();
-    });
-
-    // 로그아웃 버튼
-    logoutBtn.addEventListener('click', async () => {
-        console.log('[Auth] Logout button clicked');
-
-        try {
-            await fetch(`${location.origin}/users/logout`, {
-                method: 'POST',
-                credentials: 'include'
-            });
-            console.log('[Auth] Logout request sent');
-        } catch (error) {
-            console.error('[Auth] Logout error:', error);
-        } finally {
-            logoutBtn.style.display = 'none';
-            window.location.href = '/login.html';
-        }
-    });
+    // ✅ 로그아웃
+    logoutBtn.onclick = async () => {
+        await fetch(`${location.origin}/users/logout`, {
+            method: 'POST', credentials: 'include'
+        });
+        logoutBtn.style.display = 'none';
+        window.location.href = '/login.html';
+    };
 </script>
 
 </body>
