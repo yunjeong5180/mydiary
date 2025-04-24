@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <title>📋 일기 목록</title>
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/list.css">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
-</head>
 
+  <!-- ✅ 로그인 상태 확인용 스크립트 -->
+  <script type="module" src="/js/checkLogin.js"></script>
+</head>
 <body>
 
 <!-- 상단 네비게이션 바 -->
@@ -43,101 +46,6 @@
   </div>
 </div>
 
-<script>
-  // ✅ 로그인 여부 확인 후 처리
-  fetch("/users/me", { credentials: "include" })
-    .then(res =>
-    {
-      if (res.ok)
-      {
-        // 🔐 로그인 되어있으면 로그아웃 버튼 보이고, 일기 불러오기 실행
-        document.getElementById("logoutBtn").style.display = "inline-block";
-        loadDiaries();
-      } else
-      {
-        // ❌ 로그인 안 되어있으면 모달 보여줌
-        document.getElementById("modal-backdrop").style.display = "block";
-        document.getElementById("modal-box").style.display = "block";
-      }
-    });
-
-  // ✅ 로그아웃 버튼 클릭 시 로그아웃 처리 후 로그인 페이지로 이동
-  document.getElementById("logoutBtn").onclick = async () =>
-  {
-    await fetch('/users/logout',
-    {
-      method: 'POST',
-      credentials: 'include'
-    });
-    location.href = '/login.html';
-  };
-
-  // ✅ 모달에서 "로그인하러 가기" 버튼 클릭 시
-  document.getElementById("modal-ok").onclick = () =>
-  {
-    location.href = "/login.html";
-  };
-
-  const diaryList = document.getElementById("diary-list");
-
-  // 🗑️ 일기 삭제 함수
-  async function deleteDiary(id)
-  {
-    const res = await fetch(`/diaries/${id}`,
-    {
-      method: "DELETE",
-      credentials: "include"
-    });
-
-    if (res.ok)
-    {
-      loadDiaries();  // 삭제 후 다시 불러오기
-    } else if (res.status === 401)
-    {
-      // ❌ 로그인 만료 → 모달 표시
-      document.getElementById("modal-backdrop").style.display = "block";
-      document.getElementById("modal-box").style.display = "block";
-    }
-  }
-
-  // 📥 일기 목록 불러오기
-  async function loadDiaries()
-  {
-    const sort = document.getElementById("sort").value;  // 정렬 방식 가져오기
-
-    const res = await fetch(`/diaries?sort=${sort}`,
-    {
-      credentials: "include"
-    });
-
-    if (res.status === 401)
-    {
-      // ❌ 세션 만료 → 모달 표시
-      document.getElementById("modal-backdrop").style.display = "block";
-      document.getElementById("modal-box").style.display = "block";
-      return;
-    }
-
-    const data = await res.json();
-    diaryList.innerHTML = "";  // 기존 목록 지우기
-
-    // 🔁 받아온 일기들을 화면에 표시
-    data.forEach(d =>
-    {
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <strong>${d.title}</strong><br>
-        ${d.content.replace(/\n/g,'<br>')}
-        <br><small>🕒 ${new Date(d.createdAt).toLocaleString()}</small>
-        <button onclick="deleteDiary(${d.id})" style="margin-left:10px;">🗑️ 삭제</button>
-      `;
-      diaryList.appendChild(li);
-    });
-  }
-
-  // 🔁 정렬 방식이 바뀌면 목록 다시 불러오기
-  document.getElementById("sort").addEventListener("change", loadDiaries);
-</script>
-
+<script type="module" src="/js/list.js"></script>
 </body>
 </html>

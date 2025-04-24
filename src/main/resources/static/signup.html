@@ -3,95 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>📝 회원가입</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/signup.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
-    <style>
-        /* ✅ 회원가입 폼 스타일 */
-        .main-content {
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 30px 40px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            background-color: #fff;
-        }
-        .main-content h2 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #333;
-        }
-        .form-group {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            width: 120px;
-            font-weight: bold;
-            padding-right: 15px;
-            box-sizing: border-box;
-            font-size: 0.95em;
-        }
-        .form-group input,
-        .form-group select {
-            flex: 1;
-            min-width: 200px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        .form-note {
-            width: 100%;
-            font-size: 0.85em;
-            color: #666;
-            margin: -5px 0 10px 0;
-            padding-left: 135px;
-            box-sizing: border-box;
-        }
-        #passwordMatchMsg {
-            margin-left: 10px;
-            font-weight: bold;
-            font-size: 0.9em;
-            flex-shrink: 0;
-        }
-        button[type="submit"] {
-            width: 100%;
-            padding: 12px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1.1em;
-            margin-top: 20px;
-            transition: background-color 0.2s;
-        }
-        button[type="submit"]:hover {
-            background-color: #218838;
-        }
-        #msg {
-            color: red;
-            margin-top: 15px;
-            text-align: center;
-            font-size: 0.9em;
-            min-height: 1.2em;
-        }
-        p.login-link-container {
-            text-align: center;
-            margin-top: 25px;
-        }
-        p.login-link-container a {
-            color: #007bff;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        p.login-link-container a:hover {
-            text-decoration: underline;
-        }
-    </style>
 </head>
 <body>
 
@@ -103,7 +17,7 @@
 <main class="main-content">
     <h2>📝 회원가입</h2>
 
-    <!-- ✅ 회원가입 입력 폼 -->
+    <!-- 회원가입 폼 -->
     <form id="signupForm">
         <div class="form-group">
             <label for="name">이름</label>
@@ -155,115 +69,15 @@
 
         <button type="submit">회원가입 완료</button>
     </form>
+
     <p id="msg"></p>
 
-    <!-- ✅ 로그인 링크 안내 -->
     <p class="login-link-container">
-        이미 계정이 있으신가요?
+        이미 계정이 있으시나요?
         <a href="/login.html" id="loginLink">로그인하러 가기 →</a>
     </p>
 </main>
 
-<script>
-    // ✅ 비밀번호 확인 실시간 체크용
-    const passwordInput = document.getElementById("password");
-    const confirmInput = document.getElementById("confirmPassword");
-    const matchMsg = document.getElementById("passwordMatchMsg");
-    const signupForm = document.getElementById('signupForm');
-    const msgElem = document.getElementById("msg");
-    const loginLink = document.getElementById("loginLink");
-
-    // ✅ URL 파라미터에서 redirect 값 추출
-    const urlParams = new URLSearchParams(location.search);
-    const redirectTo = urlParams.get("redirect");
-
-    // ✅ 로그인 링크에도 redirect 파라미터 적용
-    let baseLoginUrl = '/login.html';
-    if (redirectTo) {
-        try {
-            if ((redirectTo.startsWith('/') || redirectTo.endsWith('.html')) && !redirectTo.includes(':')) {
-                baseLoginUrl = `/login.html?redirect=${encodeURIComponent(redirectTo)}`;
-            } else {
-                console.warn("Invalid redirect parameter detected for login link:", redirectTo);
-            }
-        } catch (e) {
-            console.error("Error processing redirect for login link:", e);
-        }
-    }
-    loginLink.href = baseLoginUrl;
-
-    // ✅ 비밀번호 일치 여부 실시간 반영
-    function checkPasswordMatch() {
-        if (confirmInput.value === "") {
-            matchMsg.textContent = "";
-            confirmInput.style.borderColor = '#ccc';
-        } else if (passwordInput.value === confirmInput.value) {
-            matchMsg.textContent = "✔ 일치!";
-            matchMsg.style.color = "green";
-            confirmInput.style.borderColor = 'green';
-        } else {
-            matchMsg.textContent = "❌ 불일치";
-            matchMsg.style.color = "red";
-            confirmInput.style.borderColor = 'red';
-        }
-    }
-    passwordInput.addEventListener("input", checkPasswordMatch);
-    confirmInput.addEventListener("input", checkPasswordMatch);
-
-    // ✅ 폼 제출 처리
-    signupForm.onsubmit = async (e) => {
-        e.preventDefault();
-        msgElem.textContent = '';
-
-        // ❌ 비밀번호 불일치 또는 너무 짧은 경우
-        if (passwordInput.value !== confirmInput.value) {
-            msgElem.textContent = "❌ 비밀번호가 일치하지 않습니다.";
-            confirmInput.focus();
-            return;
-        }
-        if (passwordInput.value.length < 6) {
-            msgElem.textContent = "❌ 비밀번호는 6자 이상이어야 합니다.";
-            passwordInput.focus();
-            return;
-        }
-
-        const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData.entries());
-        delete data.confirmPassword;
-
-        const signupUrl = `${location.origin}/users/signup`;
-
-        try {
-            const res = await fetch(signupUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            if (res.ok) {
-                alert("회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.");
-                location.href = loginLink.href;
-            } else {
-                let errorText = '회원가입에 실패했습니다. 입력 정보를 확인해주세요.';
-                try {
-                    if (res.headers.get('content-type')?.includes('application/json')) {
-                        const errorJson = await res.json();
-                        errorText = errorJson.message || errorText;
-                    } else {
-                        const text = await res.text();
-                        if (text) errorText = text;
-                    }
-                } catch (parseError) {
-                    console.error("Error parsing signup error response:", parseError);
-                }
-                msgElem.textContent = `❌ ${errorText} (Status: ${res.status})`;
-            }
-        } catch (error) {
-            console.error('Signup fetch error:', error);
-            msgElem.textContent = '회원가입 중 오류가 발생했습니다. 네트워크 연결을 확인해주세요.';
-        }
-    };
-</script>
-
+<script src="/js/signup.js" type="module"></script>
 </body>
 </html>

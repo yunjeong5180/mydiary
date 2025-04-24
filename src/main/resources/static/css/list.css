@@ -1,0 +1,31 @@
+/* 현재 별도 list.css는 필요하지 않지만 분리한다면 아래와 같은 확장 가능 */
+
+ul#diary-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+ul#diary-list li {
+  background: white;
+  padding: 1.2rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
+  margin-bottom: 1.2rem;
+  line-height: 1.6;
+  position: relative;
+  text-align: left;
+}
+
+ul#diary-list button {
+  background-color: #ff3b30;
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+}
+
+ul#diary-list button:hover {
+  background-color: #d9231d;
+}

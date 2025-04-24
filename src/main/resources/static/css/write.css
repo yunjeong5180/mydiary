@@ -1,0 +1,28 @@
+#modal-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 10px;
+  padding: 20px 30px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  text-align: center;
+  font-size: 1.1em;
+  display: none;
+}
+
+#modal-ok {
+  margin-top: 20px;
+  padding: 6px 14px;
+  background: #2980b9;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#modal-ok:hover {
+  background: #3498db;
+}

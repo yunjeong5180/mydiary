@@ -5,13 +5,16 @@
     <title>✍️ 새 일기 작성</title>
 
     <!-- 공통 스타일 + 한글 폰트 적용 -->
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/write.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+    <!-- ✅ 로그인 상태 확인용 스크립트 -->
+    <script type="module" src="/js/checkLogin.js"></script>
 </head>
 
 <body>
-
-<!-- 상단 네비게이션 바 -->
+<!-- 상단 네비가이션 바 -->
 <nav class="nav-bar">
     <h1 class="nav-title">📘 나의 일기장</h1>
     <div class="nav-menu">
@@ -38,71 +41,6 @@
     <button id="modal-ok">로그인하러 가기</button>
 </div>
 
-<script>
-    // ✅ 로그인 상태 확인 → 비로그인 시 모달 표시
-    async function checkLogin()
-    {
-      const res = await fetch("/users/me",
-      {
-        credentials: "include"
-      });
-      if (!res.ok)
-      {
-        document.getElementById("modal-backdrop").style.display = "block";
-        document.getElementById("modal-box").style.display = "block";
-      }
-    }
-
-    checkLogin(); // 페이지 열리자마자 로그인 확인
-
-    // ✅ 일기 저장 처리
-    const form  = document.getElementById("diary-form");
-    const title = document.getElementById("title");
-    const text  = document.getElementById("content");
-
-    form.addEventListener("submit", async e =>
-    {
-      e.preventDefault(); // 기본 폼 제출 막기
-
-      const diary =
-      {
-        title: title.value,
-        content: text.value
-      };
-
-      const res = await fetch("/diaries",
-      {
-        method: "POST",
-        headers:
-        {
-            "Content-Type": "application/json"
-        },
-        credentials: "include", // 세션 쿠키 포함
-        body: JSON.stringify(diary)
-      });
-
-      if (res.ok)
-      {
-        alert("일기가 저장되었습니다!");
-        title.value = "";
-        text.value = "";
-      } else if (res.status === 401)
-      {
-        // 세션 만료 → 로그인 유도 모달 표시
-        document.getElementById("modal-backdrop").style.display = "block";
-        document.getElementById("modal-box").style.display = "block";
-      } else
-      {
-        alert("저장 실패: " + await res.text());
-      }
-    });
-
-    // ✅ 모달 내 버튼 → 로그인 페이지로 이동
-    document.getElementById("modal-ok").onclick = () =>
-    {
-      location.href = "/login.html";
-    };
-</script>
-
+<script type="module" src="/js/write.js"></script>
 </body>
 </html>
