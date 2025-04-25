@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (loginBtn) {
     loginBtn.onclick = () => {
       const path = pendingRedirect.replace(/^\//, '');
+      console.log("🔁 로그인 모달 클릭 시 redirect 경로:", path);
       window.location.href = `/login.html?redirect=${encodeURIComponent(path)}`;
     };
   }
