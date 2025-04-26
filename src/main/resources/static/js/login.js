@@ -1,6 +1,6 @@
 // ✅ 전역 에러 감지용 (JS 런타임 오류 추적)
 window.addEventListener('error', (e) => {
-  console.error("❌ JS 런타임 에러 발생:", e.message);
+  console.error("❌ JS 런타임 에러 발생:", e.message, e.filename, e.lineno);
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,102 +9,134 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('loginForm');
   const msgElem = document.getElementById('msg');
   const signupLinkBtn = document.getElementById('signupLinkBtn');
-  const loginBtn = document.getElementById('loginBtn'); // 🔘 로그인 버튼 가져오기
 
   console.log("✅ loginForm 존재 여부:", loginForm);
 
-  // 🔘 로그인 버튼 클릭 시 명시적으로 submit 트리거
-if (loginBtn && loginForm) {
-  loginBtn.addEventListener('click', (e) => {
-    e.preventDefault(); // 기본 제출 방지
-    console.log("🔘 로그인 버튼 클릭됨!");
-    loginForm.requestSubmit(); // form의 onsubmit 강제 실행
-  });
-}
+  // 🔁 페이지 로드 시 한 번만 redirect 값 읽어서 회원가입 링크 설정
+  const initialUrlParams = new URLSearchParams(location.search);
+  const initialRedirectTo = initialUrlParams.get("redirect");
+  console.log("✅ 페이지 로드 시 redirectTo 값:", initialRedirectTo);
 
-  // 📌 submit 이벤트도 별도로 확인
-  if (loginForm) {
-    loginForm.addEventListener('submit', () => {
-      console.log("📌 form submit 이벤트 캐치됨!");
-    });
-  }
-
-  // 🔁 URL에서 redirect 파라미터 읽기
-  const urlParams = new URLSearchParams(location.search);
-  const redirectTo = urlParams.get("redirect");
-  console.log("✅ 로그인 후 이동할 redirectTo 값:", redirectTo);
-
-  // 🔗 회원가입 버튼에 redirect 정보 추가
+  // 🔗 회원가입 버튼에 redirect 정보 추가 (페이지 로드 시 값 기준)
   if (signupLinkBtn) {
     signupLinkBtn.onclick = () => {
-      let base = '/signup.html';
+      let signupUrl = '/signup.html';
       if (
-        redirectTo &&
-        (redirectTo.startsWith('/') || redirectTo.endsWith('.html')) &&
-        !redirectTo.includes(':') &&
-        !redirectTo.includes('//')
+        initialRedirectTo &&
+        (initialRedirectTo.startsWith('/') || initialRedirectTo.endsWith('.html')) &&
+        !initialRedirectTo.includes(':') &&
+        !initialRedirectTo.includes('//')
       ) {
-        base += `?redirect=${encodeURIComponent(redirectTo)}`;
+        // 유효한 로컬 경로일 경우에만 redirect 파라미터 추가
+        signupUrl += `?redirect=${encodeURIComponent(initialRedirectTo)}`;
       }
-      console.log("🔗 회원가입 버튼 클릭 → 이동할 주소:", base);
-      location.href = base;
+      console.log("🔗 회원가입 버튼 클릭 → 이동할 주소:", signupUrl);
+      location.href = signupUrl;
     };
+  } else {
+      console.warn("❗ signupLinkBtn을 찾을 수 없습니다.");
   }
 
   // ✅ 로그인 폼 제출 처리
   if (loginForm) {
     loginForm.onsubmit = async (e) => {
-      e.preventDefault();
+      e.preventDefault(); // 기본 폼 제출 방지
       console.log("✅ loginForm.onsubmit 함수 실행됨!");
-      msgElem.textContent = '';
+      msgElem.textContent = ''; // 이전 오류 메시지 초기화
+
+      // *** 중요: 폼 제출 시점의 URL에서 redirect 파라미터를 다시 읽어옴 ***
+      const currentUrlParams = new URLSearchParams(location.search);
+      const redirectToOnSubmit = currentUrlParams.get("redirect");
+      console.log("✅ 폼 제출 시점의 redirectTo 값:", redirectToOnSubmit);
 
       const formData = new FormData(e.target);
       const body = Object.fromEntries(formData.entries());
       console.log("📤 로그인 요청 데이터:", body);
 
+      // API URL 생성 (절대 경로 사용)
+      const loginUrl = `${location.origin}/users/login`;
+      console.log("📤 로그인 요청 URL:", loginUrl);
+
       try {
-        const res = await fetch(`${location.origin}/users/login`, {
+        const res = await fetch(loginUrl, { // 수정된 URL 사용
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
+          credentials: 'include', // 쿠키 전송/수신을 위해 필요
           body: JSON.stringify(body)
         });
 
         console.log("📥 로그인 응답 상태:", res.status);
+        console.log("📥 로그인 응답 헤더:", Object.fromEntries([...res.headers.entries()]));
+        console.log("📝 현재 쿠키:", document.cookie);
 
         if (res.ok) {
-          let finalRedirectUrl = '/index.html';
-          if (
-            redirectTo &&
-            (redirectTo.startsWith('/') || redirectTo.endsWith('.html')) &&
-            !redirectTo.includes(':') &&
-            !redirectTo.includes('//')
-          ) {
-            finalRedirectUrl = '/' + redirectTo.replace(/^\//, '');
+          // 로그인 성공
+          console.log("✅ 로그인 성공!");
+
+          // 로그인 상태 로컬 스토리지에 저장
+          localStorage.setItem('isLoggedIn', 'true');
+
+          // 쿠키가 설정되었는지 확인
+          if (!document.cookie.includes('session=') && !document.cookie.includes('auth=')) {
+            console.warn("⚠️ 로그인 성공했으나 인증 쿠키가 없습니다!");
           }
 
-          console.log("✅ 로그인 성공 → 이동:", finalRedirectUrl);
-          location.href = finalRedirectUrl;
+          // 리디렉션 경로 결정 (폼 제출 시점의 redirectTo 값 사용)
+          let finalRedirectUrl = '/index.html'; // 기본 리디렉션 경로
+
+          if (redirectToOnSubmit) {
+            // 보안 검사 (유효하고 안전한 경로인지 확인)
+            if ((redirectToOnSubmit.startsWith('/') || redirectToOnSubmit.endsWith('.html')) &&
+                !redirectToOnSubmit.includes(':') &&
+                !redirectToOnSubmit.includes('//')) {
+
+              // 경로 정규화 (슬래시 처리)
+              finalRedirectUrl = redirectToOnSubmit.startsWith('/')
+                ? redirectToOnSubmit
+                : '/' + redirectToOnSubmit;
+
+              console.log(`✅ 유효한 redirect 경로 사용: ${finalRedirectUrl}`);
+            } else {
+              console.warn(`⚠️ 유효하지 않은 redirect 값 무시: ${redirectToOnSubmit}`);
+            }
+          } else {
+            console.log("✅ redirect 파라미터 없음. 기본 경로(/index.html)로 이동.");
+          }
+
+          console.log("🚀 최종 이동 경로:", finalRedirectUrl);
+
+          // 쿠키 설정을 위한 약간의 지연 후 리다이렉트
+          setTimeout(() => {
+            location.href = finalRedirectUrl;
+          }, 100);
 
         } else {
-          let errorText = '아이디 또는 비밀번호가 잘못되었습니다.';
+          // 로그인 실패 시 서버에서 보낸 오류 메시지를 표시
+          let errorText = '아이디 또는 비밀번호가 잘못되었습니다.'; // 기본 오류 메시지
           try {
             if (res.headers.get('content-type')?.includes('application/json')) {
-              const errorJson = await res.json();
-              errorText = errorJson.message || errorText;
+                const errorJson = await res.json();
+                errorText = errorJson.message || errorText;
             } else {
-              const text = await res.text();
-              if (text) errorText = text;
+                const text = await res.text();
+                if (text) errorText = text;
             }
           } catch (parseError) {
-            console.error("Error parsing login error response:", parseError);
+            console.error("❌ 로그인 오류 응답 파싱 실패:", parseError);
           }
           msgElem.textContent = `❌ ${errorText}`;
           console.warn("⚠️ 로그인 실패 메시지:", errorText);
+
+          // 로그인 실패 시 로컬 스토리지 상태 제거
+          localStorage.removeItem('isLoggedIn');
         }
       } catch (error) {
-        console.error('Login fetch error:', error);
-        msgElem.textContent = '로그인 중 오류가 발생했습니다. 네트워크를 확인해주세요.';
+        // 네트워크 오류 등 fetch 자체 실패
+        console.error('❌ 로그인 fetch 오류:', error);
+        msgElem.textContent = '로그인 중 오류가 발생했습니다. 네트워크 연결을 확인해주세요.';
+
+        // 로그인 실패 시 로컬 스토리지 상태 제거
+        localStorage.removeItem('isLoggedIn');
       }
     };
   } else {

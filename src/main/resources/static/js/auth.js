@@ -45,5 +45,65 @@ export async function logout() {
   } catch (err) {
     console.error("로그아웃 요청 실패:", err);
   }
+  // 단순 로그인 페이지로 이동 (로그아웃이므로 리다이렉트 정보 없이 이동)
   location.href = '/login.html';
+}
+
+/**
+ * ✅ 로그인 필요 시 로그인 페이지로 리다이렉트
+ * - 현재 페이지 정보를 유지하여 로그인 후 원래 페이지로 돌아오도록 함
+ */
+export function redirectToLogin() {
+  const currentPath = location.pathname;
+  // 이미 로그인 페이지면 리다이렉트 하지 않음
+  if (currentPath === '/login.html') return;
+
+  // 현재 페이지 정보를 redirect 파라미터로 전달
+  location.href = `/login.html?redirect=${encodeURIComponent(currentPath.replace(/^\//, ''))}`;
+}
+
+/**
+ * ✅ 인증 체크 함수 (지연 실행 포함)
+ * - 쿠키가 완전히 설정될 수 있도록 약간의 지연 후 인증 확인
+ * - 인증 실패 시 로그인 페이지로 리다이렉트
+ */
+export function checkAuthWithDelay(delay = 100) {
+  return new Promise(resolve => {
+    setTimeout(async () => {
+      try {
+        // 인증 상태 확인 (쿠키 포함)
+        const res = await fetch('http://localhost:8081/users/me', {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        const isLoggedIn = res.ok;
+
+        if (!isLoggedIn) {
+          // 로그인 페이지로 리다이렉트
+          redirectToLogin();
+        }
+
+        resolve(isLoggedIn);
+      } catch (err) {
+        console.error("인증 체크 오류:", err);
+        // 오류 시 로그인 페이지로 리다이렉트
+        redirectToLogin();
+        resolve(false);
+      }
+    }, delay);
+  });
+}
+
+// 로그인 상태를 로컬 스토리지에 저장/확인하는 도우미 함수
+export function setLoginState(isLoggedIn) {
+  if (isLoggedIn) {
+    localStorage.setItem('isLoggedIn', 'true');
+  } else {
+    localStorage.removeItem('isLoggedIn');
+  }
+}
+
+export function getLoginState() {
+  return localStorage.getItem('isLoggedIn') === 'true';
 }
