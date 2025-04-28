@@ -1,31 +1,34 @@
 .main-content {
   max-width: 600px;
-  margin: 40px auto;
+  margin: 60px auto; /* 상단 마진 조정 */
   padding: 30px 40px;
-  border: 1px solid #ddd;
+  border: 1px solid #d1d8e2; /* 마이턴 스타일 테두리 색상 */
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* 은은한 그림자 */
   background-color: #fff;
 }
 
 .main-content h2 {
   text-align: center;
-  margin-bottom: 25px;
-  color: #333;
+  margin-bottom: 30px; /* 여백 증가 */
+  color: #2c3e50; /* 마이턴 스타일 텍스트 색상 */
+  font-weight: 500;
+  font-size: 1.6em;
 }
 
 .form-group {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 18px; /* 여백 증가 */
 }
 
 .form-group label {
   width: 120px;
-  font-weight: bold;
+  font-weight: 500; /* 폰트 굵기 조정 */
   padding-right: 15px;
-  font-size: 0.95em;
+  font-size: 1em;
+  color: #333;
 }
 
 .form-group input,
@@ -33,44 +36,51 @@
   flex: 1;
   min-width: 200px;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #e0e0e0; /* 마이턴 스타일 입력창 테두리 */
   border-radius: 4px;
+  font-size: 1em;
 }
 
 .form-note {
   width: 100%;
-  font-size: 0.85em;
-  color: #666;
-  margin: -5px 0 10px 0;
+  font-size: 0.9em;
+  color: #777; /* 폰트 색상 조정 */
+  margin: -5px 0 12px 0; /* 여백 조정 */
   padding-left: 135px;
 }
 
 #passwordMatchMsg {
   margin-left: 10px;
-  font-weight: bold;
+  font-weight: 500; /* 폰트 굵기 조정 */
   font-size: 0.9em;
   flex-shrink: 0;
+  color: #28a745; /* 일치 시 색상 변경 */
+}
+
+#passwordMatchMsg.error {
+  color: #e74c3c; /* 불일치 시 색상 변경 */
 }
 
 button[type="submit"] {
   width: 100%;
   padding: 12px;
-  background-color: #28a745;
+  background-color: #3498db; /* 마이턴 스타일 메인 버튼 색상 */
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
   font-size: 1.1em;
-  margin-top: 20px;
+  margin-top: 25px; /* 여백 증가 */
+  transition: background-color 0.2s;
 }
 
 button[type="submit"]:hover {
-  background-color: #218838;
+  background-color: #2980b9;
 }
 
 #msg {
-  color: red;
-  margin-top: 15px;
+  color: #e74c3c; /* 마이턴 스타일 오류 메시지 색상 */
+  margin-top: 18px; /* 여백 조정 */
   text-align: center;
   font-size: 0.9em;
   min-height: 1.2em;
@@ -78,15 +88,17 @@ button[type="submit"]:hover {
 
 p.login-link-container {
   text-align: center;
-  margin-top: 25px;
+  margin-top: 30px; /* 여백 증가 */
+  font-size: 0.95em;
 }
 
 p.login-link-container a {
-  color: #007bff;
+  color: #3498db; /* 마이턴 스타일 링크 색상 */
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 p.login-link-container a:hover {
   text-decoration: underline;
+  color: #2980b9;
 }

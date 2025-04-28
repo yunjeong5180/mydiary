@@ -5,6 +5,7 @@ import com.diary.mydiary.model.User;
 import com.diary.mydiary.repository.DiaryRepository;
 import com.diary.mydiary.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -71,5 +72,24 @@ public class DiaryController
     public void deleteDiary(@PathVariable Long id)
     {
         diaryRepository.deleteById(id);
+    }
+
+    /**
+     * 🛠️ [PATCH] 특정 일기 수정
+     *
+     * - URL에 포함된 일기 ID를 기반으로 제목과 내용을 수정합니다.
+     * - (현재는 작성자 확인 없이 수정 가능)
+     */
+    @PatchMapping("/diaries/{id}")
+    public ResponseEntity<String> updateDiary(@PathVariable Long id, @RequestBody Diary diaryRequest) {
+        Diary diary = diaryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Diary not found"));
+
+        diary.setTitle(diaryRequest.getTitle());
+        diary.setContent(diaryRequest.getContent());
+
+        diaryRepository.save(diary);
+
+        return ResponseEntity.ok("Diary updated successfully");
     }
 }

@@ -1,31 +1,171 @@
-/* 현재 별도 list.css는 필요하지 않지만 분리한다면 아래와 같은 확장 가능 */
-
-ul#diary-list {
-  list-style: none;
-  padding: 0;
+/* 📋 일기 리스트 전체 */
+#diary-list {
   margin-top: 2rem;
+  padding: 0 20px; /* 좌우 여백 추가 */
 }
 
-ul#diary-list li {
+/* 📄 일기 하나 카드 스타일 */
+#diary-list > div.diary-item {
+  background: #fff; /* 흰색 배경 */
+  padding: 1.5rem; /* 좀 더 여유로운 패딩 */
+  border-radius: 8px; /* 둥근 모서리 */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* 은은한 그림자 */
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  border: 1px solid #e0e0e0; /* 연한 테두리 */
+}
+
+/* 왼쪽: 제목/본문/작성일 */
+.diary-left {
+  flex: 1;
+  line-height: 1.7; /* 좀 더 편안한 줄 간격 */
+  word-break: break-word;
+}
+
+.diary-left h3 {
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #2c3e50; /* 마이턴 스타일의 어두운 텍스트 */
+  margin-bottom: 0.5rem;
+}
+
+.diary-left p {
+  color: #555;
+  font-size: 0.95em;
+  margin-bottom: 0.8rem;
+}
+
+.diary-left .date {
+  color: #777;
+  font-size: 0.85em;
+}
+
+/* 오른쪽: 버튼들 */
+.diary-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-left: 20px;
+}
+
+/* ✏️ 수정 버튼 */
+.edit-btn {
+  background-color: #3498db; /* 마이턴 스타일의 파란색 */
+  color: white;
+  border: none;
+  padding: 8px 16px; /* 좀 더 보기 좋은 패딩 */
+  border-radius: 4px;
+  cursor: pointer;
+  width: auto; /* 내용에 맞게 너비 조정 */
+  min-width: 80px;
+  margin-top: 5px;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
+}
+
+/* 🗑️ 삭제 버튼 */
+.delete-btn {
+  background-color: #e74c3c; /* 마이턴 스타일의 빨간색 */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: auto;
+  min-width: 80px;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
+}
+
+/* 버튼 hover 효과 */
+.delete-btn:hover {
+  background-color: #c0392b;
+}
+
+.edit-btn:hover {
+  background-color: #2980b9;
+}
+
+/* ✨ ✏️ 수정 모달 관련 스타일 (기존 스타일 유지) */
+
+/* 모달 전체 배경 */
+#edit-modal-backdrop {
+  position: fixed; /* 🔥 화면 전체 고정 */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* 반투명 배경 */
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* 모달 박스 */
+#edit-modal-box {
   background: white;
-  padding: 1.2rem;
-  border-radius: 16px;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
-  margin-bottom: 1.2rem;
-  line-height: 1.6;
-  position: relative;
-  text-align: left;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
 }
 
-ul#diary-list button {
-  background-color: #ff3b30;
-  position: absolute;
-  right: 16px;
-  top: 16px;
-  font-size: 0.9rem;
-  padding: 0.4rem 0.8rem;
+/* 모달 안 입력 폼들 */
+#edit-modal-box input,
+#edit-modal-box textarea {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
 }
 
-ul#diary-list button:hover {
-  background-color: #d9231d;
+/* 모달 버튼 */
+#edit-modal-box button {
+  margin: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95em;
+}
+
+/* 저장 버튼 스타일 */
+#save-edit-btn {
+  background-color: #3498db; /* 마이턴 스타일의 파란색 */
+  color: white;
+}
+
+/* 취소 버튼 스타일 */
+#cancel-edit-btn {
+  background-color: #e74c3c; /* 마이턴 스타일의 빨간색 */
+  color: white;
+}
+
+/* 정렬 방식 선택 스타일 */
+.main-content > label {
+  font-size: 1em;
+  color: #333;
+  margin-right: 0.5rem;
+}
+
+.main-content > select#sort {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+  color: #555;
+}
+
+.main-content > h2 {
+  font-size: 1.8em;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }

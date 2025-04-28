@@ -9,25 +9,20 @@
 </head>
 <body>
 
-<!-- 상단 네비게이션 -->
 <nav class="nav-bar">
   <h1 class="nav-title">📘 나의 일기장</h1>
 </nav>
 
-<!-- 로그인 영업 -->
 <main class="main-content">
   <h2>🔐 로그인</h2>
-  <!-- 로그인 폼 -->
   <form id="loginForm">
     <input name="username" placeholder="아이디" required>
     <input name="password" type="password" placeholder="비밀번호" required>
     <button id="loginBtn" type="submit">로그인</button>
   </form>
 
-  <!-- 오류 메시지 출력 -->
   <p id="msg"></p>
 
-  <!-- 추가 버튼 -->
   <div class="extra-buttons">
     <button id="signupLinkBtn">회원가입</button>
     <button onclick="alert('아이디/비밀번호 찾기 기능은 준비 중입니다.')">아이디/비밀번호 찾기</button>
