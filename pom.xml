@@ -47,13 +47,6 @@
 			<version>42.7.2</version>
 		</dependency>
 
-		<!-- 🧪 테스트용 메모리 DB (H2) -->
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-
 		<!-- 🦾 Lombok (Getter/Setter 자동 생성 등) -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
