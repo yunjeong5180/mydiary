@@ -2,7 +2,6 @@
 import { redirectToLogin, checkAuthWithDelay, getLoginState } from '/js/auth.js';
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // 로컬 스토리지 로그인 상태 확인
   const localLoginState = getLoginState();
   console.log("💡 로컬 스토리지 로그인 상태:", localLoginState);
 
@@ -38,7 +37,6 @@ const image = document.getElementById("image");
 form.addEventListener("submit", async e => {
   e.preventDefault();
 
-  // 🔥 FormData 객체로 데이터 묶기
   const formData = new FormData();
   formData.append("title", title.value);
   formData.append("content", text.value);
@@ -51,15 +49,14 @@ form.addEventListener("submit", async e => {
       method: "POST",
       credentials: "include",
       body: formData
-      // 🔥 headers 설정 "절대 금지" (Content-Type을 FormData가 알아서 설정함)
     });
 
     if (res.ok) {
       alert("일기가 저장되었습니다!");
-      title.value = "";
-      text.value = "";
-      image.value = "";
+      // ✅ 일기 저장 성공 시 바로 목록 페이지로 이동
+      window.location.href = "/list.html";
     } else if (res.status === 401) {
+      // ✅ 로그인 필요 모달 표시
       document.getElementById("modal-backdrop").style.display = "block";
       document.getElementById("modal-box").style.display = "block";
     } else {

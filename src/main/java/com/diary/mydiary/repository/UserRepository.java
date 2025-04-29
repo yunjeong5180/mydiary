@@ -20,4 +20,11 @@ public interface UserRepository extends JpaRepository<User, Long>
      * - 결과가 없을 수도 있으므로 Optional로 감싸서 반환합니다.
      */
     Optional<User> findByUsername(String username);
+
+    /**
+     * 🔍 id(기본키)로 사용자 찾기
+     * - 사용자의 고유 ID를 기준으로 DB에서 사용자 정보를 조회합니다.
+     * - 결과가 없을 수도 있으므로 Optional로 감싸서 반환합니다.
+     */
+    Optional<User> findById(Long id); // ✅ 명시적으로 추가 (JpaRepository에도 있지만 명확히 적어줌)
 }

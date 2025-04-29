@@ -68,4 +68,11 @@ public class UserService {
 
         return user;
     }
+
+    /**
+     * ⭐ 추가된 부분: userId로 사용자 가져오기
+     */
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
 }
