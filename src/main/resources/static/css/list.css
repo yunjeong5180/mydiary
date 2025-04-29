@@ -6,106 +6,113 @@
 
 /* 📄 일기 하나 카드 스타일 */
 #diary-list > div.diary-item {
-  background: #fff; /* 흰색 배경 */
-  padding: 1.5rem; /* 좀 더 여유로운 패딩 */
-  border-radius: 8px; /* 둥근 모서리 */
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* 은은한 그림자 */
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-  border: 1px solid #e0e0e0; /* 연한 테두리 */
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+  border: 1px solid #e0e0e0;
 }
 
-/* 왼쪽: 제목/본문/작성일 */
-.diary-left {
-  flex: 1;
-  line-height: 1.7; /* 좀 더 편안한 줄 간격 */
-  word-break: break-word;
-}
-
-.diary-left h3 {
-  font-size: 1.2em;
-  font-weight: 600;
-  color: #2c3e50; /* 마이턴 스타일의 어두운 텍스트 */
-  margin-bottom: 0.5rem;
-}
-
-.diary-left p {
-  color: #555;
-  font-size: 0.95em;
+/* 📝 제목 */
+.diary-title {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #2c3e50;
   margin-bottom: 0.8rem;
 }
 
-.diary-left .date {
-  color: #777;
-  font-size: 0.85em;
+/* 🖼️ 본문 가로 정렬 */
+.diary-body {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  margin-bottom: 1rem;
 }
 
-/* 오른쪽: 버튼들 */
-.diary-right {
+/* 이미지 */
+.diary-body img {
+  max-width: 180px;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* 본문 텍스트 */
+.diary-text {
+  flex: 1;
+  white-space: pre-line;
+  color: #444;
+  font-size: 0.95em;
+  line-height: 1.7;
+  word-break: break-word;
+}
+
+/* 🛠️ 버튼 영역 */
+.diary-buttons {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-left: 20px;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 /* ✏️ 수정 버튼 */
 .edit-btn {
-  background-color: #3498db; /* 마이턴 스타일의 파란색 */
+  background-color: #3498db;
   color: white;
   border: none;
-  padding: 8px 16px; /* 좀 더 보기 좋은 패딩 */
+  padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
-  width: auto; /* 내용에 맞게 너비 조정 */
   min-width: 80px;
-  margin-top: 5px;
   font-size: 0.9em;
   transition: background-color 0.2s;
 }
 
 /* 🗑️ 삭제 버튼 */
 .delete-btn {
-  background-color: #e74c3c; /* 마이턴 스타일의 빨간색 */
+  background-color: #e74c3c;
   color: white;
   border: none;
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
-  width: auto;
   min-width: 80px;
   font-size: 0.9em;
   transition: background-color 0.2s;
 }
 
 /* 버튼 hover 효과 */
+.edit-btn:hover {
+  background-color: #2980b9;
+}
 .delete-btn:hover {
   background-color: #c0392b;
 }
 
-.edit-btn:hover {
-  background-color: #2980b9;
+/* 🗓️ 작성일 표시 */
+.date {
+  font-size: 0.85em;
+  color: #777;
+  margin-top: 5px;
+  display: block;
+  text-align: right;
 }
 
-/* ✨ ✏️ 수정 모달 관련 스타일 (기존 스타일 유지) */
-
-/* 모달 전체 배경 */
+/* ✨ ✏️ 수정 모달 관련 스타일 */
 #edit-modal-backdrop {
-  position: fixed; /* 🔥 화면 전체 고정 */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4); /* 반투명 배경 */
+  background: rgba(0, 0, 0, 0.4);
   display: none;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 }
 
-/* 모달 박스 */
 #edit-modal-box {
   background: white;
   padding: 2rem;
@@ -116,7 +123,6 @@
   text-align: center;
 }
 
-/* 모달 안 입력 폼들 */
 #edit-modal-box input,
 #edit-modal-box textarea {
   width: 100%;
@@ -126,7 +132,6 @@
   border-radius: 6px;
 }
 
-/* 모달 버튼 */
 #edit-modal-box button {
   margin: 0.5rem;
   padding: 0.6rem 1.2rem;
@@ -136,19 +141,17 @@
   font-size: 0.95em;
 }
 
-/* 저장 버튼 스타일 */
 #save-edit-btn {
-  background-color: #3498db; /* 마이턴 스타일의 파란색 */
+  background-color: #3498db;
   color: white;
 }
 
-/* 취소 버튼 스타일 */
 #cancel-edit-btn {
-  background-color: #e74c3c; /* 마이턴 스타일의 빨간색 */
+  background-color: #e74c3c;
   color: white;
 }
 
-/* 정렬 방식 선택 스타일 */
+/* 정렬 드롭다운 */
 .main-content > label {
   font-size: 1em;
   color: #333;

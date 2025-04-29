@@ -30,7 +30,12 @@ public class Diary
     private String title;
 
     /** 📄 일기 내용 */
+    @Column(length = 5000) // 또는 @Lob 사용
     private String content;
+
+    /** 🖼️ 첨부한 이미지 파일 경로 */
+    @Column(nullable = true)
+    private String imagePath;
 
     /** 🕒 일기 작성 시간 (자동 저장) */
     @CreatedDate
@@ -47,9 +52,16 @@ public class Diary
     private User user;
 
     /** 🔧 편의 생성자 (초기 테스트용) */
-    public Diary(String title, String content)
-    {
+    public Diary(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    /** 🔧 새 생성자 (사진 추가용) */
+    public Diary(String title, String content, String imagePath, User user) {
+        this.title = title;
+        this.content = content;
+        this.imagePath = imagePath;
+        this.user = user;
     }
 }
