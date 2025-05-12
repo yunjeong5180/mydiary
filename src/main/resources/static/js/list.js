@@ -114,3 +114,5 @@ function openEditModal(id, title, content) {
 // ✅ 전역 등록
 window.openEditModal = openEditModal;
 window.deleteDiary = deleteDiary;
+
+
