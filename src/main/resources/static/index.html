@@ -6,24 +6,24 @@
     <title>나의 일기장 - 홈</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/index.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuQlLWg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 
-<!-- ✅ 상단 네비게이션 -->
 <nav class="nav-bar">
-    <h1 class="nav-title">📘 나의 일기장</h1>
-    <button id="logoutBtn">Logout</button>
+    <h1 class="nav-title">나의 일기장</h1>
+    <button id="logoutBtn">로그아웃</button>
 </nav>
 
-<!-- ✅ 메인 버튼 -->
 <main class="home-center">
     <h2>오늘의 일기를 기록해보세요 😊</h2>
-    <button id="writeBtn">✍️ 새 일기 작성</button>
-    <button id="listBtn">📋 일기 목록 보기</button>
+    <div class="button-group">
+        <button id="writeBtn">새 일기 작성</button>
+        <button id="listBtn">일기 목록 보기</button>
+    </div>
 </main>
 
-<!-- ✅ 로그인 모달 -->
 <div class="modal-container" id="loginModal">
     <div class="modal-content">
         <p>로그인이 필요한 서비스입니다.<br>로그인 또는 회원가입을 해주세요.</p>
@@ -35,7 +35,6 @@
     </div>
 </div>
 
-<!-- ✅ 스크립트 -->
 <script type="module" src="/js/index.js"></script>
 </body>
 </html>

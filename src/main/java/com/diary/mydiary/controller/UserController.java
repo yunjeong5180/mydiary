@@ -28,9 +28,6 @@ public class UserController {
 
     /**
      * 📝 회원가입 처리
-     *
-     * - 중복 아이디가 있는지 확인
-     * - 비밀번호를 암호화한 후 사용자 정보를 저장
      */
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
@@ -47,8 +44,6 @@ public class UserController {
 
     /**
      * 🔐 로그인 (세션 기반)
-     *
-     * - 아이디와 비밀번호를 검사하고, 성공 시 세션에 사용자 정보 저장
      */
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest req, HttpSession session) {
@@ -64,14 +59,17 @@ public class UserController {
                     .body("❌ 비밀번호 오류");
         }
 
-        session.setAttribute("user", user); // ✅ 세션에 사용자 저장
+        // ✅ 세션에 사용자 저장 (User 객체)
+        session.setAttribute("user", user);
+
+        // ✅ 세션에 사용자 ID도 따로 저장
+        session.setAttribute("userId", user.getId());
+
         return ResponseEntity.ok("✅ 로그인 성공 (세션 저장)");
     }
 
     /**
      * 🙋 로그인 상태 확인
-     *
-     * - 세션에서 사용자 정보가 있는지 확인
      */
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(HttpSession session) {
@@ -87,8 +85,6 @@ public class UserController {
 
     /**
      * 🚪 로그아웃 처리
-     *
-     * - 세션을 초기화하여 로그인 상태 해제
      */
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpSession session) {

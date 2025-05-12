@@ -40,11 +40,11 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
-		<!-- 🧪 테스트용 메모리 DB (H2) -->
+		<!-- 💾 PostgreSQL (Supabase 연결용) -->
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.7.2</version>
 		</dependency>
 
 		<!-- 🦾 Lombok (Getter/Setter 자동 생성 등) -->
