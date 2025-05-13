@@ -8,9 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const loginForm = document.getElementById('loginForm');
   const msgElem = document.getElementById('msg');
-  const signupLinkBtn = document.getElementById('signupLinkBtn');
+  const signupLinkBtn = document.getElementById('signupLinkBtn'); // ❗ 주석 해제
 
   console.log("✅ loginForm 존재 여부:", loginForm);
+  if (signupLinkBtn) { // ❗ signupLinkBtn 존재 여부도 로그로 확인
+    console.log("✅ signupLinkBtn 존재 여부:", signupLinkBtn);
+  } else {
+    console.warn("❗ signupLinkBtn을 찾을 수 없습니다. HTML에서 id='signupLinkBtn' 확인 필요!"); // ❗ HTML에 ID가 없으면 이 로그가 찍힐 것임
+  }
+
 
   // 🔁 페이지 로드 시 한 번만 redirect 값 읽어서 회원가입 링크 설정
   const initialUrlParams = new URLSearchParams(location.search);
@@ -18,8 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log("✅ 페이지 로드 시 redirectTo 값:", initialRedirectTo);
 
   // 🔗 회원가입 버튼에 redirect 정보 추가 (페이지 로드 시 값 기준)
-  if (signupLinkBtn) {
-    signupLinkBtn.onclick = () => {
+  if (signupLinkBtn) { // 이 조건문은 이제 ID가 있다면 항상 true가 됨
+    signupLinkBtn.onclick = (event) => { // event 파라미터 추가 (선택적이지만 좋은 습관)
+      event.preventDefault(); // 버튼의 기본 동작(만약 있다면) 방지
       let signupUrl = '/signup.html';
       if (
         initialRedirectTo &&
@@ -33,9 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log("🔗 회원가입 버튼 클릭 → 이동할 주소:", signupUrl);
       location.href = signupUrl;
     };
-  } else {
-      console.warn("❗ signupLinkBtn을 찾을 수 없습니다.");
   }
+  // else 부분은 signupLinkBtn을 못찾는 경우의 로그이므로 그대로 둡니다.
+  // 하지만 HTML에 ID를 추가하면 이 else 블록은 실행되지 않아야 합니다.
 
   // ✅ 로그인 폼 제출 처리
   if (loginForm) {

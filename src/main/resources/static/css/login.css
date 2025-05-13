@@ -1,18 +1,20 @@
-/* 로그인 폼 레이아웃 및 스타일 */
+/* login.css */
+
+/* 로그인 폼 레이아웃 및 스타일 (이 부분은 기존과 동일) */
 .main-content {
     max-width: 400px;
-    margin: 80px auto; /* 좀 더 여유로운 상단 마진 */
+    margin: 80px auto;
     padding: 30px;
-    border: 1px solid #d1d8e2; /* 마이턴 스타일 테두리 색상 */
+    border: 1px solid #d1d8e2;
     border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* 좀 더 은은한 그림자 */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     background-color: #fff;
 }
 
 .main-content h2 {
     text-align: center;
-    margin-bottom: 30px; /* 여백 증가 */
-    color: #2c3e50; /* 마이턴 스타일 텍스트 색상 */
+    margin-bottom: 30px;
+    color: #2c3e50;
     font-weight: 500;
     font-size: 1.5em;
 }
@@ -20,17 +22,17 @@
 #loginForm input {
     width: 100%;
     padding: 12px;
-    margin-bottom: 18px; /* 여백 증가 */
-    border: 1px solid #e0e0e0; /* 마이턴 스타일 입력창 테두리 */
+    margin-bottom: 18px;
+    border: 1px solid #e0e0e0;
     border-radius: 4px;
     box-sizing: border-box;
     font-size: 1em;
 }
 
-#loginForm button {
+#loginForm button { /* 로그인 주 버튼 */
     width: 100%;
     padding: 12px;
-    background-color: #3498db; /* 마이턴 스타일 메인 버튼 색상 */
+    background-color: #3498db;
     color: white;
     border: none;
     border-radius: 4px;
@@ -44,30 +46,51 @@
 }
 
 #msg {
-    color: #e74c3c; /* 마이턴 스타일 오류 메시지 색상 */
+    color: #e74c3c;
     margin-top: 15px;
     text-align: center;
     font-size: 0.9em;
     min-height: 1.2em;
 }
 
+/* === 하단 버튼들 스타일 (button 태그 사용 기준) === */
 .extra-buttons {
-    margin-top: 25px; /* 여백 증가 */
+    margin-top: 25px;
     text-align: center;
+    font-size: 0; /* 자식 inline-block 요소 간의 불필요한 공백 제거 트릭 */
 }
 
+/* 버튼과 구분자에 대한 최소 공통 스타일 */
+.extra-buttons button,
+.extra-buttons .separator {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* 버튼 스타일 */
 .extra-buttons button {
     background: none;
     border: none;
-    color: #3498db; /* 마이턴 스타일 링크 버튼 색상 */
+    color: #3498db;
     cursor: pointer;
-    margin: 0 10px;
-    padding: 8px; /* 패딩 증가 */
-    font-size: 0.95em;
+    /* 간격 조정을 위해 margin-right 만 줄여보거나, 좌우 마진을 더 작게 설정 */
+    margin: 0 1px;   /* 예시: 좌우 마진을 각 3px로 설정 (기존 5px 또는 2px에서 조정) */
+    padding: 1px;    /* 버튼의 안쪽 여백은 유지 (글씨와 버튼 경계) */
+    font-size: 14px; /* 또는 0.95rem 등 */
+    font-family: inherit;
     transition: color 0.2s, text-decoration 0.2s;
 }
 
 .extra-buttons button:hover {
     text-decoration: underline;
     color: #2980b9;
+}
+
+/* 구분자 스타일 */
+.extra-buttons .separator {
+    color: #ccc;
+    margin: 0;       /* 구분자 자체의 마진은 0으로 유지 */
+    /* 간격 조정을 위해 padding 좌우를 0으로 또는 매우 작게 설정 */
+    padding: 8px 1px; /* 예시: 상하 패딩은 버튼과 맞추고, 좌우 패딩을 각 1px로 최소화 */
+    font-size: 13px; /* 또는 0.9rem 등 */
 }
