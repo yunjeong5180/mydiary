@@ -27,4 +27,6 @@ public interface UserRepository extends JpaRepository<User, Long>
      * - 결과가 없을 수도 있으므로 Optional로 감싸서 반환합니다.
      */
     Optional<User> findById(Long id); // ✅ 명시적으로 추가 (JpaRepository에도 있지만 명확히 적어줌)
+
+    Optional<User> findByEmail(String email); // 메소드 (User 엔티티에 email 필드 가정)
 }
