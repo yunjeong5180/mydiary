@@ -3,17 +3,18 @@ package com.diary.mydiary.controller;
 import com.diary.mydiary.dto.FindIdRequest;
 import com.diary.mydiary.dto.FindIdResponse;
 import com.diary.mydiary.dto.LoginRequest;
+import com.diary.mydiary.dto.PasswordResetRequest;
+import com.diary.mydiary.dto.ApiResponse;
+import com.diary.mydiary.dto.ResetPasswordRequest;
 import com.diary.mydiary.model.User; // User 모델을 @RequestBody로 직접 받는 경우
 import org.springframework.util.StringUtils; // StringUtils.hasText 사용을 위해 추가
 import com.diary.mydiary.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-// import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-// import java.util.Optional;
 
 /**
  * 👤 사용자 관련 요청을 처리하는 컨트롤러
@@ -88,7 +89,8 @@ public class UserController
             session.setAttribute("user", user);
             session.setAttribute("userId", user.getId());
             return ResponseEntity.ok("✅ 로그인 성공 (세션 저장)");
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e)
+        {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("❌ " + e.getMessage());
         }
     }
@@ -106,7 +108,8 @@ public class UserController
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("❌ 로그인되어 있지 않습니다.");
         }
-
+        // 사용자 정보 반환 시 비밀번호 등 민감 정보 제외 필요 (User DTO 사용 권장)
+        // 여기서는 간단히 User 객체 전체를 반환한다고 가정
         return ResponseEntity.ok(user);
     }
 
@@ -120,10 +123,9 @@ public class UserController
         return ResponseEntity.ok("로그아웃 완료");
     }
 
-    // --- 아이디 찾기 API 엔드포인트 추가 ---
     /**
-     * 🔍 아이디 찾기
-     * - 이메일을 받아 아이디(username)를 찾아 마스킹하여 반환합니다.
+     * 🔍 아이디 찾기 API
+     * - 이메일을 받아 아이디(username)를 찾아 마스킹하여 반환
      */
     @PostMapping("/find-id")
     public ResponseEntity<FindIdResponse> handleFindId(@RequestBody FindIdRequest findIdRequest) {
@@ -144,10 +146,61 @@ public class UserController
         }
     }
 
-    // --- 실시간 중복 체크 API  ---
-    // 사용자 편의성을 위한 보조적인 기능이며, 즉각적인 피드백을 제공
     /**
-     * ✅ 아이디(username) 중복 실시간 체크
+     * 🔑 비밀번호 재설정 요청 API
+     * - 사용자 아이디와 이메일을 받아, 일치하는 사용자가 있으면 비밀번호 재설정 이메일을 발송합니다.
+     */
+    @PostMapping("/request-password-reset") // API 경로 및 HTTP 메소드 매핑
+    public ResponseEntity<ApiResponse> requestPasswordReset(@RequestBody PasswordResetRequest request)
+    {
+        try
+        {
+            // UserService에 해당 기능을 수행하는 메소드 호출
+            userService.requestPasswordReset(request);
+            // 보안을 위해 실제 사용자 존재 여부나 메일 발송 성공 여부와 관계없이 일관된 긍정 메시지 반환
+            return ResponseEntity.ok(new ApiResponse(true, "입력하신 정보가 정확하다면, 비밀번호 재설정 안내 메일을 발송했습니다."));
+        } catch (IllegalArgumentException e)
+        {
+            // 서비스 로직에서 유효성 검사 실패 등 (예: 아이디/이메일 누락)으로 발생한 예외 처리
+            return ResponseEntity.badRequest().body(new ApiResponse(false, e.getMessage()));
+        } catch (Exception e)
+        {
+            // 그 외 예측하지 못한 서버 내부 오류 처리
+            System.err.println("비밀번호 재설정 요청 처리 중 서버 오류 발생: " + e.getMessage());
+            e.printStackTrace(); // 개발 중 상세 오류 확인을 위해 스택 트레이스 출력
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(false, "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."));
+        }
+    }
+
+    /**
+     * 🔄 새 비밀번호로 재설정 처리 API
+     * - 유효한 토큰과 새 비밀번호를 받아 사용자의 비밀번호를 변경합니다.
+     * @param request ResetPasswordRequest (토큰, 새 비밀번호 포함)
+     * @return ApiResponse 성공 또는 실패 메시지
+     */
+    @PostMapping("/reset-password")
+    public ResponseEntity<ApiResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        try {
+            userService.resetPassword(request); // 서비스 계층에 해당 메소드 구현 필요
+            return ResponseEntity.ok(new ApiResponse(true, "비밀번호가 성공적으로 변경되었습니다."));
+        } catch (IllegalArgumentException e) { // 유효하지 않은 토큰, 만료된 토큰, 비밀번호 정책 위반 등 서비스 계층에서 발생시킨 예외
+            return ResponseEntity.badRequest().body(new ApiResponse(false, e.getMessage()));
+        }
+        // MethodArgumentNotValidException (DTO 유효성 검사 실패 시)은 @ControllerAdvice로 처리하는 것이 더 깔끔합니다.
+        // 여기서는 간단히 Exception으로 처리합니다.
+        catch (Exception e) { // 그 외 서버 내부 오류
+            // log.error("Error resetting password: ", e); // 로깅 프레임워크 사용 권장
+            System.err.println("실제 비밀번호 재설정 중 서버 오류 발생: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(false, "비밀번호 변경 중 오류가 발생했습니다."));
+        }
+    }
+
+    /**
+     * ✅ 아이디(username) 중복 실시간 체크 API
+     * 사용자 편의성을 위한 보조적인 기능이며, 즉각적인 피드백을 제공
      * @param username 확인할 아이디
      * @return 중복 여부 및 메시지를 담은 ResponseEntity
      */
