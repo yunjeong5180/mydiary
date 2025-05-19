@@ -244,6 +244,7 @@ public class UserService {
     private void sendPasswordResetEmail(String toEmail, String token) {
         System.out.println("[DEBUG] Inside sendPasswordResetEmail method. Recipient: " + toEmail + ", Token: " + token);
 
+        System.out.println("<<<<<< [DEBUG] resetBaseUrl in sendPasswordResetEmail: " + resetBaseUrl + " >>>>>>"); // 이 로그를 추가!
         String subject = "[내 서비스 이름] 비밀번호 재설정 안내"; // TODO: "[내 서비스 이름]"을 실제 서비스명으로 변경하세요.
         // !!! HTML 파일명(reset_password.html)과 일치하도록 수정 !!!
         String resetPageUrl = resetBaseUrl + "/reset_password.html?token=" + token; // 수정된 부분
