@@ -90,4 +90,10 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
     checkLoginAndHandleUI();
   }, 100);
+  if (logoutBtn) {
+      logoutBtn.onclick = () => {
+        localStorage.removeItem('isLoggedIn'); // 로그아웃 시 로컬 스토리지 상태 제거
+        logout(); // auth.js의 logout 함수 호출
+      };
+    }
 });

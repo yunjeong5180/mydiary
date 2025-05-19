@@ -102,3 +102,18 @@ p.login-link-container a:hover {
   text-decoration: underline;
   color: #2980b9;
 }
+
+.validation-msg {
+    font-size: 0.85em;
+    margin-top: 5px;
+    min-height: 1.2em; /* 메시지가 없을 때도 공간 유지 */
+    width: 100%;       /* 부모 요소(form-group)의 전체 너비를 차지하도록 설정 */
+    text-align: center; /* 텍스트를 가운데 정렬 */
+    display: block;    /* div가 기본적으로 block이지만 명시, width 적용을 위해 */
+}
+.validation-msg.success {
+    color: blue; /* 성공 메시지는 파란색 (또는 초록색 등 선호하는 색상으로 변경 가능) */
+}
+.validation-msg.error {
+    color: red;
+}
