@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 지연 적용 인증 체크 (쿠키 설정 시간 확보)
   setTimeout(async () => {
     try {
-      const res = await fetch('/users/me', {
+      const res = await fetch('/api/users/me', {
         credentials: 'include'  // 쿠키 포함 설정
       });
 

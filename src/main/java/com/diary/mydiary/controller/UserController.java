@@ -180,16 +180,20 @@ public class UserController
      * @return ApiResponse 성공 또는 실패 메시지
      */
     @PostMapping("/reset-password")
-    public ResponseEntity<ApiResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
-        try {
+    public ResponseEntity<ApiResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest request)
+    {
+        try
+        {
             userService.resetPassword(request); // 서비스 계층에 해당 메소드 구현 필요
             return ResponseEntity.ok(new ApiResponse(true, "비밀번호가 성공적으로 변경되었습니다."));
-        } catch (IllegalArgumentException e) { // 유효하지 않은 토큰, 만료된 토큰, 비밀번호 정책 위반 등 서비스 계층에서 발생시킨 예외
+        } catch (IllegalArgumentException e)
+        { // 유효하지 않은 토큰, 만료된 토큰, 비밀번호 정책 위반 등 서비스 계층에서 발생시킨 예외
             return ResponseEntity.badRequest().body(new ApiResponse(false, e.getMessage()));
         }
         // MethodArgumentNotValidException (DTO 유효성 검사 실패 시)은 @ControllerAdvice로 처리하는 것이 더 깔끔합니다.
         // 여기서는 간단히 Exception으로 처리합니다.
-        catch (Exception e) { // 그 외 서버 내부 오류
+        catch (Exception e)
+        { // 그 외 서버 내부 오류
             // log.error("Error resetting password: ", e); // 로깅 프레임워크 사용 권장
             System.err.println("실제 비밀번호 재설정 중 서버 오류 발생: " + e.getMessage());
             e.printStackTrace();

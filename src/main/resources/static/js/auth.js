@@ -7,8 +7,13 @@
  * - 콜백 함수가 주어지면 로그인된 경우 실행
  */
 export async function checkLoginAndHandleUI(onLoggedIn) {
-  try {
-    const res = await fetch(`${location.origin}/users/me`, {
+  try
+  {
+    const res = await fetch(`${location.origin}/api/users/me`,
+    {
+//        Workspace 함수의 URL 부분에 users/me 앞에 /api를 추가하여 /api/users/me로 변경했습니다.
+//        location.origin은 현재 페이지의 주소 (예: http://localhost:8080)를 나타내므로,
+//        최종 경로는 http://localhost:8080/api/users/me가 됩니다.
       method: 'GET',
       credentials: 'include'
     });
@@ -38,7 +43,7 @@ export async function checkLoginAndHandleUI(onLoggedIn) {
  */
 export async function logout() {
   try {
-    await fetch(`${location.origin}/users/logout`, {
+    await fetch(`${location.origin}/api/users/logout`, {
       method: 'POST',
       credentials: 'include'
     });
@@ -72,7 +77,13 @@ export function checkAuthWithDelay(delay = 100) {
     setTimeout(async () => {
       try {
         // 인증 상태 확인 (쿠키 포함)
-        const res = await fetch('http://localhost:8081/users/me', {
+        // 수정 전: const res = await fetch('http://localhost:8081/users/me', { ... });
+        const res = await fetch(`${location.origin}/api/users/me`,
+        {
+//            기존의 http://localhost:8081/users/me는 포트번호도 다르고 /api도 빠져있었습니다.
+//            올바른 API 경로인 /api/users/me로 수정했습니다.
+//            location.origin을 사용하거나 간단히 상대 경로로 지정하는 것이 좋습니다.
+
           method: 'GET',
           credentials: 'include'
         });
